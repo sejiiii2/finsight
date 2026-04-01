@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinSight — BLV-First Banking Copilot</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue-600: #2563EB;
+  --blue-700: #1D4ED8;
+  --blue-50: #EFF6FF;
+  --blue-100: #DBEAFE;
+  --green-600: #16A34A;
+  --green-50: #F0FDF4;
+  --green-100: #DCFCE7;
+  --green-700: #15803D;
+  --amber-50: #FFFBEB;
+  --amber-100: #FEF3C7;
+  --amber-600: #D97706;
+  --amber-900: #78350F;
+  --red-50: #FEF2F2;
+  --red-300: #FCA5A5;
+  --red-600: #DC2626;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --white: #FFFFFF;
+  --radius: 12px;
+  --font: 'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--gray-100);
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 16px; color: var(--gray-900);
+}
+
+.phone-frame {
+  width: 100%; max-width: 390px; height: 844px;
+  background: var(--white); border-radius: 40px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.05);
+  overflow: hidden; position: relative; display: flex; flex-direction: column;
+}
+.notch { width: 126px; height: 28px; background: #000; border-radius: 0 0 16px 16px; margin: 0 auto; flex-shrink: 0; }
+
+.screen { flex: 1; display: none; flex-direction: column; overflow: hidden; animation: fadeIn .25s ease; }
+.screen.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.top-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 1px solid var(--gray-200); flex-shrink: 0; min-height: 52px; }
+.voice-indicator { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-500); }
+.voice-indicator svg { color: var(--blue-600); width: 16px; height: 16px; }
+
+.speaking-indicator { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--blue-50); border-radius: 16px; font-size: 12px; color: var(--blue-600); font-weight: 600; }
+.speaking-bars { display: flex; gap: 2px; align-items: center; height: 12px; }
+.speaking-bar { width: 2.5px; background: var(--blue-600); border-radius: 2px; animation: bb .8s ease-in-out infinite; }
+.speaking-bar:nth-child(1) { height: 5px; } .speaking-bar:nth-child(2) { height: 9px; animation-delay:.15s; } .speaking-bar:nth-child(3) { height: 12px; animation-delay:.3s; } .speaking-bar:nth-child(4) { height: 7px; animation-delay:.45s; }
+@keyframes bb { 0%,100% { transform: scaleY(.5); } 50% { transform: scaleY(1); } }
+
+.back-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; font-size: 15px; font-weight: 600; color: var(--gray-800); cursor: pointer; padding: 8px 12px 8px 4px; border-radius: 8px; font-family: var(--font); }
+.back-btn:hover { background: var(--gray-50); } .back-btn:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+
+.step-indicator { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 24px 0; flex-shrink: 0; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-200); transition: all .3s; }
+.step-dot.active { background: var(--blue-600); width: 24px; border-radius: 4px; } .step-dot.done { background: var(--blue-600); }
+
+.content { flex: 1; padding: 20px 24px; display: flex; flex-direction: column; overflow-y: auto; }
+h1 { font-size: 30px; font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
+h2 { font-size: 24px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+.subtitle { font-size: 18px; color: var(--gray-600); line-height: 1.4; }
+
+/* ===== BOTTOM BAR ===== */
+.bottom-bar { flex-shrink: 0; border-top: 1px solid var(--gray-200); background: var(--gray-50); padding: 12px 24px 16px; display: flex; flex-direction: column; gap: 10px; }
+.bottom-bar .actions { display: flex; flex-direction: column; gap: 10px; }
+.mic-row { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 2px 0; }
+.mic-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--white); border: 2px solid var(--gray-200); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; }
+.mic-btn:hover { border-color: var(--blue-600); } .mic-btn:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+.mic-btn svg { width: 18px; height: 18px; color: var(--gray-500); }
+.mic-btn.listening { border-color: var(--red-600); background: var(--red-50); animation: pr 1.5s ease-out infinite; }
+.mic-btn.listening svg { color: var(--red-600); }
+@keyframes pr { 0% { box-shadow: 0 0 0 0 rgba(220,38,38,.25); } 70% { box-shadow: 0 0 0 10px rgba(220,38,38,0); } 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); } }
+.mic-label { font-size: 14px; color: var(--gray-500); font-weight: 500; }
+.mic-label.listening { color: var(--red-600); font-weight: 600; }
+
+/* Voice toast */
+.voice-toast { position: absolute; left: 24px; right: 24px; bottom: 170px; background: var(--gray-900); color: var(--white); padding: 14px 20px; border-radius: 16px; font-size: 16px; font-weight: 500; text-align: center; opacity: 0; transform: translateY(10px); transition: all .3s ease; pointer-events: none; z-index: 50; line-height: 1.4; }
+.voice-toast.visible { opacity: 1; transform: translateY(0); }
+.voice-toast .toast-label { font-size: 11px; color: var(--gray-400); display: block; margin-bottom: 4px; font-weight: 400; text-transform: uppercase; letter-spacing: .5px; }
+.voice-toast .toast-action { font-size: 13px; color: var(--blue-100); display: block; margin-top: 6px; font-weight: 400; }
+
+/* Buttons */
+.btn-primary { width: 100%; height: 56px; background: var(--blue-600); color: var(--white); border: none; border-radius: var(--radius); font-size: 18px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: background .15s; }
+.btn-primary:hover { background: var(--blue-700); } .btn-primary:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; } .btn-primary:disabled { background: var(--gray-300); cursor: not-allowed; }
+.btn-cancel { width: 100%; height: 56px; background: var(--white); color: var(--red-600); border: 2px solid var(--red-300); border-radius: var(--radius); font-size: 18px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all .15s; }
+.btn-cancel:hover { background: var(--red-50); border-color: var(--red-600); } .btn-cancel:focus-visible { outline: 3px solid var(--red-600); outline-offset: 2px; }
+
+.task-btn { width: 100%; height: 72px; background: var(--white); border: 2px solid var(--gray-200); border-radius: var(--radius); font-size: 20px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all .15s; display: flex; align-items: center; padding: 0 20px; }
+.task-btn:hover { border-color: var(--blue-600); background: var(--blue-50); } .task-btn:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+
+.recipient-card { width: 100%; padding: 16px 20px; background: var(--white); border: 2px solid var(--gray-200); border-radius: var(--radius); cursor: pointer; font-family: var(--font); transition: all .15s; display: flex; align-items: center; gap: 14px; text-align: left; }
+.recipient-card:hover { border-color: var(--blue-600); background: var(--blue-50); } .recipient-card:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue-100); color: var(--blue-600); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+.recipient-name { font-size: 18px; font-weight: 600; } .recipient-account { font-size: 14px; color: var(--gray-500); margin-top: 2px; }
+
+.amount-card { width: 100%; padding: 18px 20px; background: var(--white); border: 2px solid var(--gray-200); border-radius: var(--radius); cursor: pointer; font-family: var(--font); transition: all .15s; display: flex; align-items: center; }
+.amount-card:hover { border-color: var(--blue-600); background: var(--blue-50); } .amount-card:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+.amount-value { font-size: 26px; font-weight: 700; }
+
+.review-card { padding: 16px 20px; background: var(--gray-50); border: 2px solid var(--gray-200); border-radius: var(--radius); }
+.review-label { font-size: 14px; color: var(--gray-500); margin-bottom: 4px; } .review-value { font-size: 20px; font-weight: 700; }
+.change-btn { background: none; border: none; color: var(--blue-600); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); padding: 4px 8px; border-radius: 6px; }
+.change-btn:hover { background: var(--blue-50); } .change-btn:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+
+.warning-banner { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--amber-50); border: 2px solid var(--amber-100); border-radius: var(--radius); margin-bottom: 20px; }
+.warning-icon { width: 20px; height: 20px; color: var(--amber-600); flex-shrink: 0; } .warning-text { font-size: 14px; font-weight: 600; color: var(--amber-900); }
+
+.privacy-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; } .privacy-bullet { width: 8px; height: 8px; background: var(--blue-600); border-radius: 50%; flex-shrink: 0; margin-top: 7px; } .privacy-text { font-size: 17px; line-height: 1.5; }
+
+.countdown-number { font-size: 88px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; line-height: 1; }
+.countdown-label { font-size: 16px; color: var(--gray-500); text-align: center; margin-top: 6px; }
+.progress-bar { width: 100%; height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; margin: 20px 0; }
+.progress-fill { height: 100%; background: var(--blue-600); border-radius: 3px; transition: width 1s linear; }
+
+.success-icon { width: 72px; height: 72px; background: var(--green-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.success-card { padding: 28px 20px; background: var(--green-50); border: 2px solid var(--green-100); border-radius: var(--radius); text-align: center; }
+.success-amount { font-size: 36px; font-weight: 700; color: var(--green-700); margin-bottom: 6px; } .success-recipient { font-size: 20px; font-weight: 600; }
+
+.shield-icon { width: 56px; height: 56px; margin: 0 auto 20px; color: var(--blue-600); }
+.custom-input-row { display: flex; gap: 10px; align-items: center; }
+.amount-input-wrap { position: relative; flex: 1; }
+.amount-input { width: 100%; height: 52px; border: 2px solid var(--gray-200); border-radius: var(--radius); padding: 0 16px 0 36px; font-size: 22px; font-weight: 700; font-family: var(--font); outline: none; }
+.amount-input:focus { border-color: var(--blue-600); }
+.dollar-sign { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--gray-400); font-weight: 600; }
+
+.text-blue { color: var(--blue-600); } .text-center { text-align: center; } .spacer { flex: 1; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+</style>
+</head>
+<body>
+<div class="phone-frame" role="application" aria-label="FinSight banking app">
+<div class="notch" aria-hidden="true"></div>
+<div id="liveRegion" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+<div class="voice-toast" id="voiceToast"><span class="toast-label" id="toastLabel">I heard</span><span id="toastText"></span><span class="toast-action" id="toastAction"></span></div>
+
+<!-- ENTRY --><div id="screen-entry" class="screen active" role="region" aria-label="Home">
+<div class="top-bar"><div class="voice-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg><span>Voice on</span></div><div id="speakingIndicator" class="speaking-indicator" style="display:none"><div class="speaking-bars" aria-hidden="true"><div class="speaking-bar"></div><div class="speaking-bar"></div><div class="speaking-bar"></div><div class="speaking-bar"></div></div><span>Speaking</span></div></div>
+<div class="content"><div class="text-center" style="margin-bottom:40px;margin-top:16px"><h1>Welcome to FinSight</h1><p class="subtitle">You can say or tap what you want to do</p></div><div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px"><button class="task-btn" onclick="selectTask('send-money')">Send money</button><button class="task-btn" onclick="selectTask('check-balance')">Check my balance</button><button class="task-btn" onclick="selectTask('review-transactions')">Review transactions</button></div><p class="subtitle text-center" style="font-size:16px">Or say "Send $500 to John"</p></div>
+<div class="bottom-bar"><div class="mic-row"><span class="mic-label">Tap to speak</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+<!-- DISCLAIMER --><div id="screen-disclaimer" class="screen" role="region" aria-label="Privacy">
+<div class="top-bar"><button class="back-btn" onclick="goBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button><div class="voice-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg><span>Voice on</span></div></div>
+<div class="content"><div class="text-center"><div class="shield-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2>Your privacy matters</h2><p class="subtitle" style="margin-bottom:28px">FinSight keeps your information private and secure.</p></div><div style="display:flex;flex-direction:column;gap:12px;margin-bottom:auto"><div class="privacy-item"><div class="privacy-bullet" aria-hidden="true"></div><p class="privacy-text">No data is stored after your session</p></div><div class="privacy-item"><div class="privacy-bullet" aria-hidden="true"></div><p class="privacy-text">No session history is kept</p></div><div class="privacy-item"><div class="privacy-bullet" aria-hidden="true"></div><p class="privacy-text">You control every step of the process</p></div></div><div class="spacer"></div></div>
+<div class="bottom-bar"><div class="actions"><button class="btn-primary" onclick="navigateTo('select-recipient')">Continue</button></div><div class="mic-row"><span class="mic-label">Say "continue"</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+<!-- RECIPIENT --><div id="screen-select-recipient" class="screen" role="region" aria-label="Select recipient">
+<div class="top-bar"><button class="back-btn" onclick="goBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button><div class="voice-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg><span>Voice on</span></div></div>
+<div class="step-indicator" aria-label="Step 1 of 5"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+<div class="content"><h2>Send money</h2><p class="subtitle" style="margin-bottom:20px">Who do you want to send money to?</p><div id="recipientList" style="display:flex;flex-direction:column;gap:10px"></div></div>
+<div class="bottom-bar"><div class="mic-row"><span class="mic-label">Say a name</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+<!-- AMOUNT --><div id="screen-select-amount" class="screen" role="region" aria-label="Select amount">
+<div class="top-bar"><button class="back-btn" onclick="goBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button><div class="voice-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg><span>Voice on</span></div></div>
+<div class="step-indicator" aria-label="Step 2 of 5"><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+<div class="content"><h2>Send money</h2><p class="subtitle">How much to send to</p><p style="font-size:20px;font-weight:700;color:var(--blue-600);margin-bottom:20px" id="amountRecipientName"></p><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"><button class="amount-card" onclick="selectAmount(50)"><span class="amount-value">$50</span></button><button class="amount-card" onclick="selectAmount(100)"><span class="amount-value">$100</span></button><button class="amount-card" onclick="selectAmount(500)"><span class="amount-value">$500</span></button></div><p class="subtitle text-center" style="font-size:14px;margin-bottom:10px">Or enter a specific amount</p><div class="custom-input-row"><div class="amount-input-wrap"><span class="dollar-sign" aria-hidden="true">$</span><input type="number" id="customAmountInput" class="amount-input" placeholder="0.00" min="0" step="0.01" aria-label="Custom amount in dollars"></div><button class="btn-primary" style="width:auto;padding:0 20px;height:52px;font-size:16px" onclick="submitCustomAmount()">Go</button></div></div>
+<div class="bottom-bar"><div class="mic-row"><span class="mic-label">Say an amount</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+<!-- REVIEW --><div id="screen-review" class="screen" role="region" aria-label="Review transfer">
+<div class="top-bar"><button class="back-btn" onclick="goBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button><div class="voice-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg><span>Voice on</span></div></div>
+<div class="step-indicator" aria-label="Step 3 of 5"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+<div class="content"><div class="warning-banner" role="alert"><svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span class="warning-text">Please review carefully before confirming</span></div><h2 class="text-center" style="font-size:24px;line-height:1.4;margin-bottom:24px">You are sending <span class="text-blue" id="reviewAmount"></span> to <span class="text-blue" id="reviewRecipient"></span></h2><div style="display:flex;flex-direction:column;gap:12px"><div class="review-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span class="review-label">Recipient</span><button class="change-btn" onclick="navigateTo('select-recipient')">Change</button></div><p class="review-value" id="reviewRecipientName"></p></div><div class="review-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span class="review-label">Amount</span><button class="change-btn" onclick="navigateTo('select-amount')">Change</button></div><p class="review-value" id="reviewAmountValue"></p></div></div></div>
+<div class="bottom-bar"><div class="actions"><button class="btn-primary" onclick="confirmSend()" id="confirmBtn">Send <span id="confirmAmount"></span></button><button class="btn-cancel" onclick="cancelAll()">Cancel</button></div><div class="mic-row"><span class="mic-label">Say "send" or "cancel"</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+<!-- COUNTDOWN --><div id="screen-countdown" class="screen" role="region" aria-label="Countdown">
+<div class="top-bar"><button class="back-btn" onclick="cancelCountdown()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button><div class="voice-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.08"/></svg><span>Voice on</span></div></div>
+<div class="step-indicator" aria-label="Step 4 of 5"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div></div>
+<div class="content" style="align-items:center;justify-content:center"><p style="font-size:18px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Preparing to send</p><p style="font-size:40px;font-weight:700;color:var(--blue-600);margin-bottom:4px" id="countdownAmount"></p><p style="font-size:18px;color:var(--gray-500);margin-bottom:28px">to <span id="countdownRecipient" style="font-weight:600;color:var(--gray-800)"></span></p><p class="countdown-number" id="countdownNumber" aria-live="polite">10</p><p class="countdown-label">seconds until sent</p><div class="progress-bar" role="progressbar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div></div>
+<div class="bottom-bar"><div class="actions"><button class="btn-primary" onclick="sendNow()">Send now</button><button class="btn-cancel" onclick="cancelCountdown()">Cancel</button></div><div class="mic-row"><span class="mic-label">Say "cancel" to stop</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+<!-- SUCCESS --><div id="screen-success" class="screen" role="region" aria-label="Success">
+<div class="step-indicator" aria-label="Complete" style="padding-top:16px"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div></div>
+<div class="content" style="align-items:center;justify-content:center"><div class="success-icon" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><h2 style="margin-bottom:28px">Your money was sent</h2><div class="success-card" style="width:100%"><p class="success-amount" id="successAmount"></p><p style="color:var(--gray-400);margin-bottom:6px;font-size:14px">to</p><p class="success-recipient" id="successRecipient"></p></div><p style="font-size:15px;color:var(--gray-500);text-align:center;margin-top:20px;line-height:1.5" id="successMessage"></p></div>
+<div class="bottom-bar"><div class="actions"><button class="btn-primary" onclick="resetAll()">Done</button></div><div class="mic-row"><span class="mic-label">Say "done"</span><button class="mic-btn" onclick="toggleListening()" aria-label="Activate voice input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button></div></div></div>
+
+</div>
+
+<script>
+const state = { currentScreen:'entry', history:[], selectedRecipient:null, selectedAmount:0, countdownTimer:null, countdown:10, voiceEnabled:true, isListening:false, isSpeaking:false };
+const recipients = [
+  {id:'1',name:'John Kim',last4:'4892',initials:'JK'},
+  {id:'2',name:'Sarah Martinez',last4:'7341',initials:'SM'},
+  {id:'3',name:'Michael Chen',last4:'2156',initials:'MC'},
+  {id:'4',name:'Emily Rodriguez',last4:'8923',initials:'ER'},
+];
+
+// TTS
+const synth=window.speechSynthesis;
+const vg={
+  entry:"Welcome to FinSight. You can send money, check your balance, or review transactions.",
+  disclaimer:"Your privacy matters. No data is stored after your session. Tap Continue or say continue.",
+  'select-recipient':"Who do you want to send money to? Tap a name or say the recipient's name.",
+  'select-amount':n=>`How much do you want to send to ${n}? Choose an amount or say a specific amount.`,
+  review:(a,n)=>`You are sending $${a} to ${n}. Say send to confirm, or cancel to go back.`,
+  countdown:(a,n)=>`Preparing to send $${a} to ${n}. You have 10 seconds. Say cancel to stop.`,
+  countdownReminder:"3 seconds remaining. Say cancel to stop.",
+  success:(a,n)=>`Done. $${a} has been sent to ${n}.`,
+};
+
+function speak(text,onEnd){
+  if(!state.voiceEnabled||!synth){if(onEnd)onEnd();return;}
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=0.92;u.pitch=1;u.lang='en-US';
+  const v=synth.getVoices();
+  const p=v.find(x=>x.name.includes('Samantha')||x.name.includes('Google US'));
+  if(p)u.voice=p;
+  u.onstart=()=>{state.isSpeaking=true;showSI(true);};
+  u.onend=()=>{state.isSpeaking=false;showSI(false);if(onEnd)onEnd();};
+  u.onerror=()=>{state.isSpeaking=false;showSI(false);};
+  synth.speak(u);
+}
+function stopSpeaking(){if(synth)synth.cancel();state.isSpeaking=false;showSI(false);}
+function showSI(s){const e=document.getElementById('speakingIndicator');if(e)e.style.display=s?'flex':'none';}
+if(synth){synth.getVoices();synth.onvoiceschanged=()=>synth.getVoices();}
+
+// STT
+let recognition=null;
+try{
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(SR){
+    recognition=new SR();recognition.continuous=false;recognition.interimResults=true;recognition.lang='en-US';
+    recognition.onresult=e=>{
+      let interim='',final='';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const t=e.results[i][0].transcript;
+        if(e.results[i].isFinal)final+=t;else interim+=t;
+      }
+      if(interim)showToast(interim,'Listening...','');
+      if(final)processVC(final.trim().toLowerCase(),final.trim());
+    };
+    recognition.onend=()=>{state.isListening=false;updateMics();};
+    recognition.onerror=e=>{state.isListening=false;updateMics();if(e.error!=='no-speech'&&e.error!=='aborted'){showToast('Could not hear you','Error','Try again');setTimeout(hideToast,2500);}};
+  }
+}catch(e){}
+
+function toggleListening(){
+  if(!recognition){announce('Voice not supported.');return;}
+  if(state.isSpeaking)stopSpeaking();
+  if(state.isListening){recognition.abort();state.isListening=false;hideToast();}
+  else{try{recognition.start();state.isListening=true;}catch(e){state.isListening=false;}}
+  updateMics();
+}
+
+const micHints={entry:'Tap to speak',disclaimer:'Say "continue"','select-recipient':'Say a name','select-amount':'Say an amount',review:'Say "send" or "cancel"',countdown:'Say "cancel" to stop',success:'Say "done"'};
+function updateMics(){
+  document.querySelectorAll('.mic-btn').forEach(b=>b.classList.toggle('listening',state.isListening));
+  document.querySelectorAll('.mic-label').forEach(l=>{l.classList.toggle('listening',state.isListening);if(state.isListening)l.textContent='Listening...';});
+  if(!state.isListening)restoreHints();
+}
+function restoreHints(){const el=document.querySelector('#screen-'+state.currentScreen+' .mic-label');if(el&&micHints[state.currentScreen])el.textContent=micHints[state.currentScreen];}
+
+// Toast
+function showToast(t,l,a){const e=document.getElementById('voiceToast');document.getElementById('toastLabel').textContent=l||'I heard';document.getElementById('toastText').textContent=t;document.getElementById('toastAction').textContent=a||'';e.classList.add('visible');}
+function hideToast(){document.getElementById('voiceToast').classList.remove('visible');}
+
+// Voice command processing — recognize → confirm toast → TTS confirm → auto-transition
+function processVC(text,original){
+  const s=state.currentScreen;
+
+  if(s==='entry'){
+    const m=text.match(/send\s+\$?(\d+)\s+to\s+(.+)/i);
+    if(m){
+      const amt=parseInt(m[1]),name=m[2].trim();
+      const f=recipients.find(r=>r.name.toLowerCase().includes(name));
+      if(f&&amt>0){
+        state.selectedRecipient=f;state.selectedAmount=amt;
+        showToast(`$${amt} to ${f.name}`,'I heard','Moving to review...');
+        speak(`Sending ${amt} dollars to ${f.name}. Moving to review.`,()=>{hideToast();navigateTo('review',true);});
+        return;
+      }
+    }
+    if(text.includes('send')&&text.includes('money')){showToast('Send money','I heard','Starting...');speak('Send money.',()=>{hideToast();selectTask('send-money');});return;}
+    if(text.includes('balance')){showToast('Check balance','I heard','');speak('Not available in this prototype.',()=>hideToast());return;}
+    if(text.includes('transaction')){showToast('Review transactions','I heard','');speak('Not available in this prototype.',()=>hideToast());return;}
+    showToast(original,'I heard','Try "Send money" or "Send $120 to John"');setTimeout(hideToast,3000);return;
+  }
+
+  if(s==='disclaimer'){
+    if(text.includes('continue')||text.includes('yes')||text.includes('ok')){
+      showToast('Continue','I heard','Moving on...');speak('Continuing.',()=>{hideToast();navigateTo('select-recipient');});
+    }return;
+  }
+
+  if(s==='select-recipient'){
+    const f=recipients.find(r=>r.name.toLowerCase().split(' ').some(p=>text.includes(p)));
+    if(f){showToast(f.name,'I heard','Selecting...');speak(`${f.name}. Moving to amount.`,()=>{hideToast();selectRecipient(f);});return;}
+    showToast(original,'I heard','Name not found. Try "John" or "Sarah"');setTimeout(hideToast,3000);return;
+  }
+
+  if(s==='select-amount'){
+    let amt=0;
+    const nm=text.match(/\$?\s*(\d+)/);
+    if(nm)amt=parseInt(nm[1]);
+    else{
+      const wn={fifty:50,hundred:100,'one hundred':100,'two hundred':200,'five hundred':500,thousand:1000,twenty:20,thirty:30,forty:40,sixty:60,seventy:70,eighty:80,ninety:90,ten:10,fifteen:15,'twenty five':25,'two fifty':250,'three hundred':300,'one fifty':150,'seventy five':75};
+      for(const[w,v]of Object.entries(wn)){if(text.includes(w)){amt=v;break;}}
+    }
+    if(amt>0){
+      showToast(`$${amt}`,'I heard','Moving to review...');
+      speak(`${amt} dollars. Moving to review.`,()=>{hideToast();selectAmount(amt);});
+      return;
+    }
+    showToast(original,'I heard','Say "$120" or "fifty dollars"');setTimeout(hideToast,3000);return;
+  }
+
+  if(s==='review'){
+    if(text.includes('send')||text.includes('confirm')||text.includes('yes')){showToast('Confirm','I heard','Starting countdown...');speak('Confirmed.',()=>{hideToast();confirmSend();});return;}
+    if(text.includes('cancel')){showToast('Cancel','I heard','Going back...');speak('Cancelled.',()=>{hideToast();cancelAll();});return;}
+    if(text.includes('change')&&text.includes('amount')){showToast('Change amount','I heard','');speak('Changing amount.',()=>{hideToast();navigateTo('select-amount');});return;}
+    if(text.includes('change')&&(text.includes('recipient')||text.includes('person'))){showToast('Change recipient','I heard','');speak('Changing recipient.',()=>{hideToast();navigateTo('select-recipient');});return;}
+    return;
+  }
+
+  if(s==='countdown'){
+    if(text.includes('cancel')||text.includes('stop')){showToast('Cancel','I heard','Stopping...');speak('Cancelled.',()=>{hideToast();cancelCountdown();});return;}
+    if(text.includes('send')){showToast('Send now','I heard','Sending...');speak('Sending now.',()=>{hideToast();sendNow();});return;}
+    return;
+  }
+
+  if(s==='success'){
+    if(text.includes('done')||text.includes('ok')||text.includes('finish')){showToast('Done','I heard','');speak('Returning home.',()=>{hideToast();resetAll();});return;}
+  }
+}
+
+// Navigation
+function navigateTo(screen,skipH){
+  stopSpeaking();
+  if(state.countdownTimer&&screen!=='countdown'){clearInterval(state.countdownTimer);state.countdownTimer=null;}
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  if(!skipH)state.history.push(state.currentScreen);
+  state.currentScreen=screen;
+  const el=document.getElementById('screen-'+screen);
+  if(el){el.classList.add('active');const ft=el.querySelector('h1,h2,[role="alert"]');if(ft){ft.setAttribute('tabindex','-1');ft.focus({preventScroll:true});}}
+  updateContent(screen);restoreHints();
+  if(!state.isSpeaking)setTimeout(()=>playVG(screen),500);
+}
+function goBack(){
+  if(state.history.length>0){
+    const prev=state.history.pop();stopSpeaking();
+    if(state.countdownTimer){clearInterval(state.countdownTimer);state.countdownTimer=null;}
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    state.currentScreen=prev;document.getElementById('screen-'+prev).classList.add('active');
+    updateContent(prev);restoreHints();
+  }
+}
+function updateContent(s){
+  if(s==='select-recipient')renderRecipients();
+  if(s==='select-amount'&&state.selectedRecipient)document.getElementById('amountRecipientName').textContent=state.selectedRecipient.name+'?';
+  if(s==='review'&&state.selectedRecipient){const a='$'+state.selectedAmount.toFixed(2);document.getElementById('reviewAmount').textContent=a;document.getElementById('reviewRecipient').textContent=state.selectedRecipient.name;document.getElementById('reviewRecipientName').textContent=state.selectedRecipient.name;document.getElementById('reviewAmountValue').textContent=a;document.getElementById('confirmAmount').textContent=a;}
+  if(s==='countdown'&&state.selectedRecipient){document.getElementById('countdownAmount').textContent='$'+state.selectedAmount.toFixed(2);document.getElementById('countdownRecipient').textContent=state.selectedRecipient.name;startCountdown();}
+  if(s==='success'&&state.selectedRecipient){document.getElementById('successAmount').textContent='$'+state.selectedAmount.toFixed(2);document.getElementById('successRecipient').textContent=state.selectedRecipient.name;document.getElementById('successMessage').textContent=`The transfer has been completed. ${state.selectedRecipient.name} will receive the funds shortly.`;}
+}
+function playVG(s){
+  let t;
+  switch(s){case'entry':t=vg.entry;break;case'disclaimer':t=vg.disclaimer;break;case'select-recipient':t=vg['select-recipient'];break;case'select-amount':t=vg['select-amount'](state.selectedRecipient?.name||'');break;case'review':t=vg.review(state.selectedAmount,state.selectedRecipient?.name||'');break;case'countdown':t=vg.countdown(state.selectedAmount,state.selectedRecipient?.name||'');break;case'success':t=vg.success(state.selectedAmount,state.selectedRecipient?.name||'');break;}
+  if(t)speak(t);
+}
+
+// Actions
+function selectTask(task){if(task==='send-money')navigateTo('disclaimer');else{announce('Only Send Money is available.');speak('Only Send Money is available in this prototype.');}}
+function renderRecipients(){document.getElementById('recipientList').innerHTML=recipients.map(r=>`<button class="recipient-card" onclick="selectRecipient(recipients.find(x=>x.id==='${r.id}'))" aria-label="Send to ${r.name}, account ending in ${r.last4}"><div class="avatar">${r.initials}</div><div><p class="recipient-name">${r.name}</p><p class="recipient-account">Account ****${r.last4}</p></div></button>`).join('');}
+function selectRecipient(r){state.selectedRecipient=r;announce(`Selected ${r.name}`);navigateTo('select-amount');}
+function selectAmount(a){state.selectedAmount=a;announce(`Selected $${a}`);navigateTo('review');}
+function submitCustomAmount(){const i=document.getElementById('customAmountInput');const a=parseFloat(i.value);if(a&&a>0){selectAmount(a);i.value='';}else{announce('Please enter a valid amount');speak('Please enter a valid amount.');}}
+function confirmSend(){navigateTo('countdown');}
+function startCountdown(){
+  state.countdown=10;document.getElementById('countdownNumber').textContent='10';document.getElementById('progressFill').style.width='0%';
+  if(state.countdownTimer)clearInterval(state.countdownTimer);
+  state.countdownTimer=setInterval(()=>{
+    state.countdown--;
+    const n=document.getElementById('countdownNumber'),f=document.getElementById('progressFill');
+    if(n)n.textContent=state.countdown;if(f)f.style.width=((10-state.countdown)/10*100)+'%';
+    if(state.countdown===3){speak(vg.countdownReminder);announce('3 seconds remaining.');}
+    if(state.countdown<=0){clearInterval(state.countdownTimer);state.countdownTimer=null;navigateTo('success');}
+  },1000);
+}
+function sendNow(){if(state.countdownTimer){clearInterval(state.countdownTimer);state.countdownTimer=null;}navigateTo('success');}
+function cancelCountdown(){if(state.countdownTimer){clearInterval(state.countdownTimer);state.countdownTimer=null;}navigateTo('review');}
+function cancelAll(){state.selectedRecipient=null;state.selectedAmount=0;state.history=[];navigateTo('entry');}
+function resetAll(){state.selectedRecipient=null;state.selectedAmount=0;state.history=[];navigateTo('entry');}
+function announce(t){const r=document.getElementById('liveRegion');r.textContent='';setTimeout(()=>{r.textContent=t;},50);}
+document.getElementById('customAmountInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')submitCustomAmount();});
+setTimeout(()=>playVG('entry'),1000);
+</script>
+</body>
+</html>
