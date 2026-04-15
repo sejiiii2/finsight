@@ -1911,7 +1911,7 @@ const SCREEN_AUDIO = {
 };
 
 function speak(text) {
-  if (!state.speakEnabled || !text || !window.speechSynthesis) return;
+  if (!state.finsightMode || !state.speakEnabled || !text || !window.speechSynthesis) return;
   try {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
