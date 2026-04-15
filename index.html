@@ -2333,13 +2333,18 @@ document.addEventListener('click', (e) => {
   const mic = e.target.closest('[data-mic]');
   if (mic) {
     if (!state.finsightMode) {
-      // Turn on assistant and speak context for the current screen
+      // Turn on — speak context for the current screen
       state.finsightMode = true;
       syncFinsightModeUI();
       speakForScreen(state.current);
-      // startListening will be called automatically when speak() finishes
     } else {
-      startListening();
+      // Turn off — cancel TTS and stop listening
+      try { window.speechSynthesis.cancel(); } catch(e) {}
+      state.isSpeaking = false;
+      stopListening();
+      state.finsightMode = false;
+      syncFinsightModeUI();
+      playSessionEndCue();
     }
     return;
   }
