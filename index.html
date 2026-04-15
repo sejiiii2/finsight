@@ -824,92 +824,91 @@
 
   /* ─────────── LANDSCAPE / CAMERA FIX ─────────── */
   @media (orientation: landscape) {
-    /* Viewfinder: landscape rectangle centered with room for side controls */
+    /* Viewfinder: use all four edges so it auto-sizes as a landscape rectangle.
+       Leaves ~88px on the left (mic) and ~108px on the right (flash+shutter). */
     .viewfinder {
-      left: 12%;
-      top: 5%;
-      width: 64%;
-      height: 90%;
+      left: 88px;
+      right: 108px;
+      top: 40px;
+      bottom: 12px;
+      width: auto;
+      height: auto;
     }
 
-    /* Portrait SVG mask won't match — hide it, use CSS overlay */
-    .camera-mask svg {
-      display: none;
-    }
+    /* Portrait SVG mask is hardcoded 393×852 — hide it in landscape.
+       Replace with a simple semi-transparent overlay via ::before. */
+    .camera-mask svg { display: none; }
     .camera-mask::before {
       content: '';
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.55);
+      pointer-events: none;
     }
 
-    /* Top banner: compact height so it doesn't eat the view */
+    /* Top banner: sit in the same horizontal row as the X button.
+       Start at 72px (right edge of X button) so they share the top strip. */
     .top-banner {
-      top: 4px;
+      top: 5px;
+      left: 68px;
+      right: 0;
     }
     .top-banner-inner {
-      padding: 8px 20px;
+      padding: 7px 16px;
       border-radius: 10px;
+      margin-right: 10px;
     }
     .top-banner-inner p {
-      font-size: 17px;
+      font-size: 15px;
+      text-align: left;
     }
 
-    /* Close button: tighter to corner */
-    .cam-close {
-      top: 6px;
-      left: 12px;
-    }
+    /* Close button: tight top-left corner */
+    .cam-close { top: 5px; left: 10px; }
 
-    /* Shutter: move to right side, vertically centered */
-    .shutter {
-      bottom: auto;
-      left: auto;
-      transform: translateY(-50%);
-      right: 12px;
-      top: 56%;
-    }
-
-    /* Flash button: right side, above shutter */
+    /* Flash button: right side, upper third */
     .flash-btn {
       bottom: auto;
-      right: 16px;
-      top: calc(56% - 84px);
+      right: 18px;
+      top: 26%;
       transform: translateY(-50%);
       width: 56px;
       height: 56px;
     }
 
+    /* Shutter: right side, center */
+    .shutter {
+      bottom: auto;
+      left: auto;
+      right: 14px;
+      top: 56%;
+      transform: translateY(-50%);
+    }
+
     /* Mic button: left side, vertically centered */
     .cam-mic {
       bottom: auto;
-      left: 6px;
+      left: 4px;
       top: 50%;
       transform: translateY(-50%);
-      width: 76px;
-      height: 76px;
+      width: 72px;
+      height: 72px;
     }
 
-    /* Skip (chevron) button: right side, below shutter */
+    /* Skip chevron: right side, below shutter */
     .cam-skip {
       bottom: auto;
       left: auto;
-      top: calc(52% + 52px);
-      right: 32px;
+      right: 22px;
+      top: 78%;
       transform: translateY(-50%);
     }
 
-    /* Center card (rotate/flip/analyzing): shrink for landscape height */
-    .center-card {
-      padding: 0 16px;
-    }
-    .center-card-inner {
-      padding: 20px 24px;
-      border-radius: 12px;
-    }
-    .center-card-inner p {
-      font-size: 22px;
-    }
+    /* Center cards (rotate / flip-check / analyzing / fail):
+       add horizontal padding so text doesn't run behind the side controls */
+    .center-card { padding: 0 108px 0 88px; }
+    .center-card-inner { padding: 18px 24px; border-radius: 12px; }
+    .center-card-inner p { font-size: 20px; }
   }
 
   /* Spinner */
@@ -1525,8 +1524,8 @@
         <div class="dark-nav">
           <button class="close-btn" data-go="main"><svg viewBox="0 0 18 18" fill="none"><path d="M17 1L1.00108 16.9989M16.9989 17L1 1.00113" stroke="#F3F4F6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></button>
         </div>
-        <div class="dark-content" style="align-items:center;">
-          <div style="width:100px;height:100px;margin-bottom:32px;">
+        <div class="dark-content" style="align-items:center;justify-content:center;text-align:center;">
+          <div style="width:100px;height:100px;margin-bottom:32px;flex-shrink:0;">
             <svg viewBox="0 0 100 100" fill="none" width="100" height="100">
               <g transform="translate(10.42 10.42)">
                 <path d="M0 39.5833C0 20.9236 0 11.5937 5.79684 5.79684C11.5937 0 20.9236 0 39.5833 0C58.2431 0 67.573 0 73.3698 5.79684C79.1667 11.5937 79.1667 20.9236 79.1667 39.5833C79.1667 58.2431 79.1667 67.573 73.3698 73.3698C67.573 79.1667 58.2431 79.1667 39.5833 79.1667C20.9236 79.1667 11.5937 79.1667 5.79684 73.3698C0 67.573 0 58.2431 0 39.5833Z" fill="#C3D799"/>
@@ -1534,8 +1533,8 @@
               </g>
             </svg>
           </div>
-          <p class="dark-title" style="text-align:left;width:100%;">Your check has been captured</p>
-          <p class="dark-subtitle" style="text-align:left;width:100%;">Now I'm reviewing the details.</p>
+          <p class="dark-title" style="width:100%;text-align:center;">Your check has been captured</p>
+          <p class="dark-subtitle" style="width:100%;text-align:center;">Now I'm reviewing the details.</p>
         </div>
         <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
@@ -1984,7 +1983,7 @@ const SCREEN_AUDIO = {
   'main': null,
   'task-overview': "Now, I'll guide you through depositing your check. You'll choose an account, enter the amount, then capture the front and back of your check. Say Continue when you're ready.",
   'privacy': 'We highly care about your privacy. No data is stored after this session. Say Continue when you\'re ready.',
-  'account-select': 'Which account would you like to deposit into? You have two accounts. The first is Checking, ending in 7749. The second is Savings, ending in 3182. Say the account you want.',
+  'account-select': 'Which account would you like to deposit into? You have two accounts. The first is Checking, ending in 7, 7, 4, 9. The second is Savings, ending in 3, 1, 8, 2. Say the account you want.',
   'amount': null, // set dynamically
   'start-capture': "We'll now automatically capture your check. Place your check on a dark, contrasting surface. Say Continue when you're ready.",
   'rotate': 'Rotate your phone to landscape mode. Then say Yes when you\'re ready.',
