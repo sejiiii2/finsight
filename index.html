@@ -639,6 +639,7 @@
     gap: 12px;
     margin-top: 32px;
     width: 100%;
+    align-items: center;
   }
   .step-item {
     display: flex;
@@ -819,6 +820,96 @@
     inset: 0;
     background: rgba(255,255,255,0.15);
     pointer-events: none;
+  }
+
+  /* ─────────── LANDSCAPE / CAMERA FIX ─────────── */
+  @media (orientation: landscape) {
+    /* Viewfinder: landscape rectangle centered with room for side controls */
+    .viewfinder {
+      left: 12%;
+      top: 5%;
+      width: 64%;
+      height: 90%;
+    }
+
+    /* Portrait SVG mask won't match — hide it, use CSS overlay */
+    .camera-mask svg {
+      display: none;
+    }
+    .camera-mask::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+    }
+
+    /* Top banner: compact height so it doesn't eat the view */
+    .top-banner {
+      top: 4px;
+    }
+    .top-banner-inner {
+      padding: 8px 20px;
+      border-radius: 10px;
+    }
+    .top-banner-inner p {
+      font-size: 17px;
+    }
+
+    /* Close button: tighter to corner */
+    .cam-close {
+      top: 6px;
+      left: 12px;
+    }
+
+    /* Shutter: move to right side, vertically centered */
+    .shutter {
+      bottom: auto;
+      left: auto;
+      transform: translateY(-50%);
+      right: 12px;
+      top: 56%;
+    }
+
+    /* Flash button: right side, above shutter */
+    .flash-btn {
+      bottom: auto;
+      right: 16px;
+      top: calc(56% - 84px);
+      transform: translateY(-50%);
+      width: 56px;
+      height: 56px;
+    }
+
+    /* Mic button: left side, vertically centered */
+    .cam-mic {
+      bottom: auto;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 76px;
+      height: 76px;
+    }
+
+    /* Skip (chevron) button: right side, below shutter */
+    .cam-skip {
+      bottom: auto;
+      left: auto;
+      top: calc(52% + 52px);
+      right: 32px;
+      transform: translateY(-50%);
+    }
+
+    /* Center card (rotate/flip/analyzing): shrink for landscape height */
+    .center-card {
+      padding: 0 16px;
+    }
+    .center-card-inner {
+      padding: 20px 24px;
+      border-radius: 12px;
+    }
+    .center-card-inner p {
+      font-size: 22px;
+    }
   }
 
   /* Spinner */
