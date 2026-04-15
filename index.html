@@ -1960,11 +1960,31 @@ function playMicOpenCue() {
   playTone(880, 100, 90, 0.14);    // A5 — major third up
 }
 
+<<<<<<< HEAD
+// "Heard" cue: single soft low tone. Plays when recognition finishes with a result.
+=======
 // "Heard" cue: single soft low tone. Plays when recognition finishes.
+>>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
 function playMicHeardCue() {
   playTone(520, 120, 0, 0.10);     // C5 — soft, neutral
 }
 
+<<<<<<< HEAD
+// "Close empty" cue: soft falling tone. Plays when mic closes without a result
+// (timeout, silence). Subtler than the heard cue so frequent retries don't grate.
+function playMicCloseCue() {
+  playTone(440, 100, 0, 0.08);     // A4 — quiet, low
+}
+
+// "Session end" cue: two-tone falling — inverse of the open cue.
+// Plays when the user toggles FinSight mode off. Clearly signals "off."
+function playSessionEndCue() {
+  playTone(660, 80, 0, 0.12);      // E5
+  playTone(440, 110, 90, 0.12);    // A4 — major sixth down
+}
+
+=======
+>>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
 // ═══════════ VOICE RECOGNITION ═══════════
 function initRecognition() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1973,7 +1993,9 @@ function initRecognition() {
   r.continuous = false;  // we handle continuous via onend restart
   r.interimResults = false;
   r.lang = 'en-US';
+  let gotResult = false;
   r.onresult = (e) => {
+    gotResult = true;
     const t = e.results[0][0].transcript.toLowerCase().trim();
     playMicHeardCue();
     showHeard(t);
@@ -1983,6 +2005,18 @@ function initRecognition() {
   };
   r.onend = () => {
     document.querySelectorAll('.dark-mic, .ai-mic, .cam-mic, .main-mic-btn').forEach(b => b.classList.remove('listening'));
+<<<<<<< HEAD
+    // If the mic closed without capturing anything AND the user isn't
+    // toggling the session off, play the quiet "closed empty" cue.
+    // (We skip it when FinSight mode is off because playSessionEndCue
+    // already played, and we skip it when isSpeaking because that means
+    // we intentionally aborted to let TTS play.)
+    if (!gotResult && state.finsightMode && !state.isSpeaking) {
+      playMicCloseCue();
+    }
+    gotResult = false;  // reset for next recognition cycle
+=======
+>>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
     // Auto-restart if FinSight mode is on and we're not currently speaking
     if (state.finsightMode && !state.isSpeaking) {
       // Small delay to let any pending screen transition or speak() call settle
@@ -2265,6 +2299,10 @@ document.addEventListener('click', (e) => {
       try { window.speechSynthesis.cancel(); } catch(e) {}
       state.isSpeaking = false;
       stopListening();
+<<<<<<< HEAD
+      playSessionEndCue();
+=======
+>>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
     }
     return;
   }
