@@ -2035,7 +2035,7 @@ function speakForScreen(id) {
   if (id === 'amount') {
     txt = `You're depositing to ${ACCOUNT_LABELS[state.account]}. How much are you depositing? Your daily limit is 7,500 dollars.`;
   } else if (id === 'review') {
-    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS[state.account]}. Are all the details correct? Say Confirm if everything looks correct.`;
+    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS[state.account]}. Does the information sound good? Say Confirm if everything sounds correct.`;
   } else if (id === 'cancel-timer') {
     txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS[state.account]}. You have 10 seconds to cancel. Say Cancel to stop, or say Deposit now to continue.`;
   } else if (id === 'settings') {
