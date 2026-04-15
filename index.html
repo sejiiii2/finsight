@@ -2332,7 +2332,15 @@ document.addEventListener('click', (e) => {
 
   const mic = e.target.closest('[data-mic]');
   if (mic) {
-    startListening();
+    if (!state.finsightMode) {
+      // Turn on assistant and speak context for the current screen
+      state.finsightMode = true;
+      syncFinsightModeUI();
+      speakForScreen(state.current);
+      // startListening will be called automatically when speak() finishes
+    } else {
+      startListening();
+    }
     return;
   }
 
