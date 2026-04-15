@@ -2307,7 +2307,12 @@ document.addEventListener('click', (e) => {
     state.finsightMode = !state.finsightMode;
     syncFinsightModeUI();
     if (state.finsightMode) {
-      speak('FinSight mode activated. Say a banking task to begin.');
+      // Speak context-aware instructions for whichever screen is active
+      if (state.current === 'main') {
+        speak('FinSight mode activated. Say a banking task to begin.');
+      } else {
+        speakForScreen(state.current);
+      }
       // startListening will be called automatically when speak() finishes
     } else {
       try { window.speechSynthesis.cancel(); } catch(e) {}
