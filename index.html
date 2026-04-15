@@ -1703,6 +1703,7 @@
         </div>
         <div class="dark-content" style="gap:40px;">
           <p class="dark-title">Review check details</p>
+          <p class="voice-hint">Say "Confirm", "Edit account", or "Edit amount"</p>
           <div class="detail-card">
             <div class="detail-rows">
               <div class="detail-row detail-row-editable">
@@ -2262,7 +2263,7 @@ function speakForScreen(id) {
   if (id === 'amount') {
     txt = `You're depositing to ${ACCOUNT_LABELS_SPOKEN[state.account]}. How much are you depositing? Your daily limit is 7,500 dollars.`;
   } else if (id === 'review') {
-    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS_SPOKEN[state.account]}. Does the information sound good? Say Confirm if everything sounds correct.`;
+    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS_SPOKEN[state.account]}. Say Confirm to proceed, say Edit account or Edit amount to make a change.`;
   } else if (id === 'cancel-timer') {
     txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS_SPOKEN[state.account]}. You have 10 seconds to cancel. Say Cancel to stop, or say Deposit now to continue.`;
   } else if (id === 'settings') {
@@ -2457,8 +2458,8 @@ const M = {
   capture_now: ['capture', 'take photo', 'take picture'],
   deposit_now: ['deposit now', 'submit', 'go ahead'],
   edit_done: ['done editing', "i'm done editing", 'done', "i'm done", 'go back', 'back', 'return'],
-  edit_account: ['edit account', 'change account'],
-  edit_amount: ['edit amount', 'change amount'],
+  edit_account: ['edit account', 'change account', 'edit my account', 'change my account', 'edit the account', 'change the account', 'switch account', 'different account'],
+  edit_amount: ['edit amount', 'change amount', 'edit my amount', 'change my amount', 'edit the amount', 'change the amount', 'different amount'],
   formal: ['formal'], friendly: ['friendly'], concise: ['concise'],
   low: ['low'], medium: ['medium'], high: ['high'],
   slow: ['slower', '0.5', 'half'],
