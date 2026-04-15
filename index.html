@@ -366,6 +366,29 @@
     transition: opacity 0.15s;
   }
   .task-card:active { opacity: 0.8; }
+
+  /* Coming-soon cards */
+  .task-card[data-coming-soon] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    position: relative;
+  }
+  .task-card[data-coming-soon]::after {
+    content: 'Coming soon';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 3px 8px;
+  }
+  .task-card[data-coming-soon]:active { opacity: 0.45; }
   .task-card .label {
     font-size: 24px;
     font-weight: 600;
