@@ -1040,7 +1040,7 @@
           <div>
             <p class="try-saying">Try saying</p>
             <div class="task-grid">
-              <button class="task-card send" data-go="task-overview">
+              <button class="task-card send" data-coming-soon>
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                   <circle cx="21" cy="13.5" r="11.5" fill="#96BEF0"/>
                   <path d="M21 9C19.3431 9 18 10.0074 18 11.25C18 12.4926 19.3431 13.5 21 13.5C22.6569 13.5 24 14.5074 24 15.75C24 16.9926 22.6569 18 21 18M21 9C22.3062 9 23.4175 9.6261 23.8293 10.5M21 9V7.5M21 18C19.6938 18 18.5825 17.3739 18.1707 16.5M21 18V19.5" stroke="#005ABD" stroke-linecap="round" stroke-width="2.5"/>
@@ -1048,7 +1048,7 @@
                 </svg>
                 <p class="label">Send money</p>
               </button>
-              <button class="task-card balance" data-go="task-overview">
+              <button class="task-card balance" data-coming-soon>
                 <svg width="36" height="36" viewBox="0 0 32.5 32.5" fill="none">
                   <path d="M10.2503 26V13.25H4.25029V26H10.2503Z" fill="#A5BE71"/>
                   <path d="M28.2503 26V13.25H22.2503V26H28.2503Z" fill="#A5BE71"/>
@@ -1066,7 +1066,7 @@
                 </svg>
                 <p class="label">Deposit a check</p>
               </button>
-              <button class="task-card transfer" data-go="task-overview">
+              <button class="task-card transfer" data-coming-soon>
                 <svg width="36" height="36" viewBox="0 0 34.5 30" fill="none">
                   <path d="M1.22363 10.2266V13.2266C1.22363 17.4692 1.22363 19.5905 2.54165 20.9085C3.85967 22.2266 5.98099 22.2266 10.2236 22.2266H23.2236C27.4663 22.2266 29.5876 22.2266 30.9056 20.9085C32.2236 19.5905 32.2236 17.4692 32.2236 13.2266V10.2266C32.2236 5.98392 32.2236 3.8626 30.9056 2.54458C29.5876 1.22656 27.4663 1.22656 23.2236 1.22656H10.2236C5.98099 1.22656 3.85967 1.22656 2.54165 2.54458C1.22363 3.8626 1.22363 5.98392 1.22363 10.2266Z" fill="#9B84D5" stroke="#9B84D5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"/>
                   <path d="M7.22401 1.25C7.22401 4.54936 4.54936 7.22401 1.25 7.22401" stroke="#522EAE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
@@ -2127,7 +2127,11 @@ function handleVoice(t) {
 
   switch(screen) {
     case 'main':
-      if (matches(t, 'deposit_check') || matches(t, 'send_money')) return go('task-overview');
+      if (matches(t, 'deposit_check')) return go('task-overview');
+      if (matches(t, 'send_money')) {
+        showToast("We're still building this one!");
+        return speak("We're still building this one. Try depositing a check for now.");
+      }
       break;
     case 'task-overview':
       if (matches(t, 'continue')) return go('privacy');
@@ -2289,6 +2293,13 @@ function showHeard(text) {
 
 // ═══════════ EVENT WIRING ═══════════
 document.addEventListener('click', (e) => {
+  const comingSoon = e.target.closest('[data-coming-soon]');
+  if (comingSoon) {
+    showToast("We're still building this one!");
+    if (state.finsightMode) speak("We're still building this one. Try depositing a check for now.");
+    return;
+  }
+
   const goBtn = e.target.closest('[data-go]');
   if (goBtn) {
     if (goBtn.dataset.acct) state.account = goBtn.dataset.acct;
