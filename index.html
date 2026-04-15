@@ -263,20 +263,21 @@
     position: absolute; inset: 0;
     border-radius: 50%;
     background: var(--blue);
-    opacity: 0.18;
-    animation: aiOut 1.8s ease-in-out infinite;
+    opacity: 0;  /* hidden by default — only shown when listening/active */
+    animation: none;
   }
   .ai-mic .ring-in {
     position: absolute;
-    width: 87px; height: 87px;
+    width: 100px; height: 100px;  /* match home mic size */
     border-radius: 50%;
     background: var(--blue);
+    border: 2px solid rgba(255,255,255,0.12);  /* match home mic border */
     display: flex; align-items: center; justify-content: center;
     animation: aiIn 1.4s ease-in-out infinite;
   }
-  .ai-mic.listening .ring-out { animation-name: aiOutListen; }
+  .ai-mic.listening .ring-out { opacity: 0.18; animation: aiOutListen 1.8s ease-in-out infinite; }
   .ai-mic.active .ring-in { background: #4f9eff; }
-  .ai-mic.active .ring-out { background: #4f9eff; opacity: 0.25; }
+  .ai-mic.active .ring-out { background: #4f9eff; opacity: 0.25; animation: aiOut 1.8s ease-in-out infinite; }
   .ai-mic.active::before,
   .ai-mic.active::after {
     content: '';
