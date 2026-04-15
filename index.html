@@ -1013,6 +1013,36 @@
     background: var(--line-dark);
     width: 100%;
   }
+  .detail-row-editable {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .detail-row-editable .detail-row-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+  .edit-btn {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .edit-btn:active {
+    border-color: var(--blue);
+    color: var(--blue);
+  }
 
   /* ─────────── CANCEL TIMER ─────────── */
   .cancel-screen .dark-content {
@@ -1619,9 +1649,21 @@
           <p class="dark-title">Review check details</p>
           <div class="detail-card">
             <div class="detail-rows">
-              <div class="detail-row"><div class="k">Deposit to</div><div class="v" id="review-acct">Checking (...7749)</div></div>
+              <div class="detail-row detail-row-editable">
+                <div class="detail-row-main">
+                  <div class="k">Deposit to</div>
+                  <div class="v" id="review-acct">Checking (...7749)</div>
+                </div>
+                <button class="edit-btn" data-go="account-select">Edit</button>
+              </div>
               <div class="row-divider"></div>
-              <div class="detail-row"><div class="k">Amount</div><div class="v" id="review-amt">$1,524.24</div></div>
+              <div class="detail-row detail-row-editable">
+                <div class="detail-row-main">
+                  <div class="k">Amount</div>
+                  <div class="v" id="review-amt">$1,524.24</div>
+                </div>
+                <button class="edit-btn" data-go="amount">Edit</button>
+              </div>
               <div class="row-divider"></div>
               <div class="detail-row"><div class="k">Check routing number</div><div class="v">123456789</div></div>
               <div class="row-divider"></div>
