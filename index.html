@@ -1957,16 +1957,11 @@ function playMicOpenCue() {
   playTone(880, 100, 90, 0.14);    // A5 — major third up
 }
 
-<<<<<<< HEAD
 // "Heard" cue: single soft low tone. Plays when recognition finishes with a result.
-=======
-// "Heard" cue: single soft low tone. Plays when recognition finishes.
->>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
 function playMicHeardCue() {
   playTone(520, 120, 0, 0.10);     // C5 — soft, neutral
 }
 
-<<<<<<< HEAD
 // "Close empty" cue: soft falling tone. Plays when mic closes without a result
 // (timeout, silence). Subtler than the heard cue so frequent retries don't grate.
 function playMicCloseCue() {
@@ -1980,8 +1975,6 @@ function playSessionEndCue() {
   playTone(440, 110, 90, 0.12);    // A4 — major sixth down
 }
 
-=======
->>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
 // ═══════════ VOICE RECOGNITION ═══════════
 function initRecognition() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -2002,7 +1995,6 @@ function initRecognition() {
   };
   r.onend = () => {
     document.querySelectorAll('.dark-mic, .ai-mic, .cam-mic, .main-mic-btn').forEach(b => b.classList.remove('listening'));
-<<<<<<< HEAD
     // If the mic closed without capturing anything AND the user isn't
     // toggling the session off, play the quiet "closed empty" cue.
     // (We skip it when FinSight mode is off because playSessionEndCue
@@ -2012,8 +2004,6 @@ function initRecognition() {
       playMicCloseCue();
     }
     gotResult = false;  // reset for next recognition cycle
-=======
->>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
     // Auto-restart if FinSight mode is on and we're not currently speaking
     if (state.finsightMode && !state.isSpeaking) {
       // Small delay to let any pending screen transition or speak() call settle
@@ -2296,10 +2286,7 @@ document.addEventListener('click', (e) => {
       try { window.speechSynthesis.cancel(); } catch(e) {}
       state.isSpeaking = false;
       stopListening();
-<<<<<<< HEAD
       playSessionEndCue();
-=======
->>>>>>> c78540e15c8102174028a2be415d607b869eb5a9
     }
     return;
   }
