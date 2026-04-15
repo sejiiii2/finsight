@@ -203,22 +203,24 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: var(--blue);
-    border: 2px solid rgba(255,255,255,0.12);
+    background: #fff;
+    border: 2px solid rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 30;
+    color: #0751B0;
     transition: background 0.3s;
   }
-  .dark-mic.active { background: #4f9eff; }
+  .dark-mic.active { background: #0751B0; color: #fff; }
   .dark-mic.active::before,
   .dark-mic.active::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: rgba(79,159,255,0.18);
+    background: rgba(255,255,255,0.3);
+    border: 2px solid #fff;
     animation: sonar 2.4s ease-out infinite;
     pointer-events: none;
   }
@@ -270,21 +272,23 @@
     position: absolute;
     width: 100px; height: 100px;  /* match home mic size */
     border-radius: 50%;
-    background: var(--blue);
-    border: 2px solid rgba(255,255,255,0.12);  /* match home mic border */
+    background: #fff;
+    border: 2px solid rgba(255,255,255,0.1);  /* match home mic border */
     display: flex; align-items: center; justify-content: center;
+    color: #0751B0;
     animation: aiIn 1.4s ease-in-out infinite;
   }
   .ai-mic.listening .ring-out { opacity: 0.18; animation: aiOutListen 1.8s ease-in-out infinite; }
-  .ai-mic.active .ring-in { background: #4f9eff; }
-  .ai-mic.active .ring-out { background: #4f9eff; opacity: 0.25; animation: aiOut 1.8s ease-in-out infinite; }
+  .ai-mic.active .ring-in { background: #0751B0; color: #fff; }
+  .ai-mic.active .ring-out { background: rgba(255,255,255,0.3); opacity: 1; animation: aiOut 1.8s ease-in-out infinite; }
   .ai-mic.active::before,
   .ai-mic.active::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: rgba(79,159,255,0.18);
+    background: rgba(255,255,255,0.3);
+    border: 2px solid #fff;
     animation: sonar 2.4s ease-out infinite;
     pointer-events: none;
   }
@@ -431,33 +435,45 @@
   .tab svg { width: 32px; height: 32px; color: #9da4ad; }
   .tab.active svg { color: #fff; }
 
-  .main-mic-btn {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -52px;
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background: var(--blue-2);
-    border: 2px solid rgba(255,255,255,0.12);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 10;
-  }
-  .main-mic-btn.active { background: #4f9eff; }
-  .main-mic-btn.active::before,
-  .main-mic-btn.active::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: rgba(79,159,255,0.18);
-    animation: sonar 2.4s ease-out infinite;
-  }
-  .main-mic-btn.active::after { animation-delay: 0.7s; }
-  @keyframes sonar {
-    0% { transform: scale(1); opacity: 0.7; }
-    100% { transform: scale(2); opacity: 0; }
-  }
+.main-mic-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -52px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10;
+  color: #0751B0;
+}
+
+.main-mic-btn.active { 
+  background: #0751B0; 
+  color: #fff;
+  transform: translateX(-50%) scale(1.08);
+}
+
+.main-mic-btn.active::before,
+.main-mic-btn.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: 2px solid #fff;
+  animation: sonar 2.4s ease-out infinite;
+}
+
+.main-mic-btn.active::after { 
+  animation-delay: 0.7s; 
+}
+
+@keyframes sonar {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2); opacity: 0; }
+}
 
   /* ─────────── ACCOUNT SELECT ─────────── */
   .account-list {
@@ -784,20 +800,22 @@
     left: 21px;
     width: 100px; height: 100px;
     border-radius: 50%;
-    background: var(--blue-2);
-    border: 2px solid rgba(255,255,255,0.12);
+    background: #fff;
+    border: 2px solid rgba(255,255,255,0.1);
     display: flex; align-items: center; justify-content: center;
     z-index: 15;
-    transition: background 0.3s;
+    color: #0751B0;
+    transition: background 0.3s, color 0.3s;
   }
-  .cam-mic.active { background: #4f9eff; }
+  .cam-mic.active { background: #0751B0; color: #fff; }
   .cam-mic.active::before,
   .cam-mic.active::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: rgba(79,159,255,0.22);
+    background: rgba(255,255,255,0.3);
+    border: 2px solid #fff;
     animation: sonar 2.4s ease-out infinite;
     pointer-events: none;
   }
@@ -1274,7 +1292,7 @@
         <div class="main-content">
           <div>
             <p class="welcome-title">What do you want to do today?</p>
-            <p class="welcome-sub" id="welcome-sub">Turn on Voice Assistant to start</p>
+            <p class="welcome-sub" id="welcome-sub">Turn on FinSight mode to start</p>
           </div>
           <div>
             <p class="try-saying">Try saying</p>
@@ -1289,29 +1307,29 @@
               </button>
               <button class="task-card balance" data-coming-soon>
                 <svg width="36" height="36" viewBox="0 0 32.5 32.5" fill="none">
-                  <path d="M10.2503 26V13.25H4.25029V26H10.2503Z" fill="#A5BE71"/>
-                  <path d="M28.2503 26V13.25H22.2503V26H28.2503Z" fill="#A5BE71"/>
-                  <path d="M1.25029 11.1036C1.25029 9.30934 1.97387 8.20973 3.47124 7.37643L9.6351 3.94616C12.8649 2.14872 14.4799 1.25 16.2503 1.25C18.0207 1.25 19.6356 2.14872 22.8655 3.94616L29.0293 7.37642C30.5267 8.20973 31.2503 9.30934 31.2503 11.1036C31.2503 11.5901 31.2503 11.8334 31.1972 12.0334C30.918 13.0842 29.9659 13.25 29.0464 13.25H3.45422C2.5347 13.25 1.58257 13.0842 1.30342 12.0334C1.25029 11.8334 1.25029 11.5901 1.25029 11.1036Z" stroke="#577120" stroke-width="2.5"/>
-                  <path d="M16.2441 8.74982H16.2576" stroke="#577120" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+                  <path d="M10.2503 26V13.25H4.25029V26H10.2503Z" fill="#3d6012"/>
+                  <path d="M28.2503 26V13.25H22.2503V26H28.2503Z" fill="#3d6012"/>
+                  <path d="M1.25029 11.1036C1.25029 9.30934 1.97387 8.20973 3.47124 7.37643L9.6351 3.94616C12.8649 2.14872 14.4799 1.25 16.2503 1.25C18.0207 1.25 19.6356 2.14872 22.8655 3.94616L29.0293 7.37642C30.5267 8.20973 31.2503 9.30934 31.2503 11.1036C31.2503 11.5901 31.2503 11.8334 31.1972 12.0334C30.918 13.0842 29.9659 13.25 29.0464 13.25H3.45422C2.5347 13.25 1.58257 13.0842 1.30342 12.0334C1.25029 11.8334 1.25029 11.5901 1.25029 11.1036Z" stroke="#2e4a07" stroke-width="2.5"/>
+                  <path d="M16.2441 8.74982H16.2576" stroke="#2e4a07" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
                   <path d="M26.7503 26H5.75029C3.26501 26 1.25029 28.0147 1.25029 30.5C1.25029 30.9142 1.58608 31.25 2.00029 31.25H30.5003C30.9145 31.25 31.2503 30.9142 31.2503 30.5C31.2503 28.0147 29.2356 26 26.7503 26Z" stroke="#577120" stroke-width="2.5"/>
                 </svg>
                 <p class="label">Check balance</p>
               </button>
               <button class="task-card deposit" data-go="task-overview">
                 <svg width="36" height="36" viewBox="0 0 33.3 30.8" fill="none">
-                  <path d="M30.6 18.3883V24.6721C30.6 29.6182 29.5889 30.6504 24.744 30.6504L5.85604 30.77C1.01114 30.77 0 29.7377 0 24.7917V18.5079C0 13.5618 1.01114 12.5296 5.85604 12.5296L24.744 12.41C29.5889 12.41 30.6 13.4423 30.6 18.3883Z" fill="#D29B63"/>
-                  <path d="M12.96 25.73L25.56 25.73" stroke="#9A5B1C" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
-                  <path d="M24.9063 2.94936C25.577 2.22168 25.9123 1.85784 26.2687 1.64561C27.1285 1.13352 28.1872 1.11759 29.0613 1.6036C29.4236 1.80502 29.7692 2.15862 30.4605 2.86582C31.1518 3.57302 31.4975 3.92662 31.6944 4.29723C32.1694 5.1915 32.1539 6.27457 31.6533 7.15416C31.4458 7.51869 31.0902 7.86175 30.3789 8.54785L21.9156 16.7112C19.6733 18.874 18.2845 19.3224 15.1788 19.2411C14.615 19.2263 14.3331 19.219 14.1692 19.0327C14.0054 18.8465 14.0277 18.5589 14.0725 17.9837C14.2788 15.3322 14.7459 13.9736 16.5505 12.0156L24.9063 2.94936Z" fill="#9A5B1C" stroke="#FFF0E1" stroke-linejoin="round" stroke-width="2.5"/>
+                  <path d="M30.6 18.3883V24.6721C30.6 29.6182 29.5889 30.6504 24.744 30.6504L5.85604 30.77C1.01114 30.77 0 29.7377 0 24.7917V18.5079C0 13.5618 1.01114 12.5296 5.85604 12.5296L24.744 12.41C29.5889 12.41 30.6 13.4423 30.6 18.3883Z" fill="#a05a00"/>
+                  <path d="M12.96 25.73L25.56 25.73" stroke="#5c2d00" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                  <path d="M24.9063 2.94936C25.577 2.22168 25.9123 1.85784 26.2687 1.64561C27.1285 1.13352 28.1872 1.11759 29.0613 1.6036C29.4236 1.80502 29.7692 2.15862 30.4605 2.86582C31.1518 3.57302 31.4975 3.92662 31.6944 4.29723C32.1694 5.1915 32.1539 6.27457 31.6533 7.15416C31.4458 7.51869 31.0902 7.86175 30.3789 8.54785L21.9156 16.7112C19.6733 18.874 18.2845 19.3224 15.1788 19.2411C14.615 19.2263 14.3331 19.219 14.1692 19.0327C14.0054 18.8465 14.0277 18.5589 14.0725 17.9837C14.2788 15.3322 14.7459 13.9736 16.5505 12.0156L24.9063 2.94936Z" fill="#5c2d00" stroke="#ffd9a0" stroke-linejoin="round" stroke-width="2.5"/>
                 </svg>
                 <p class="label">Deposit a check</p>
               </button>
               <button class="task-card transfer" data-coming-soon>
                 <svg width="36" height="36" viewBox="0 0 34.5 30" fill="none">
-                  <path d="M1.22363 10.2266V13.2266C1.22363 17.4692 1.22363 19.5905 2.54165 20.9085C3.85967 22.2266 5.98099 22.2266 10.2236 22.2266H23.2236C27.4663 22.2266 29.5876 22.2266 30.9056 20.9085C32.2236 19.5905 32.2236 17.4692 32.2236 13.2266V10.2266C32.2236 5.98392 32.2236 3.8626 30.9056 2.54458C29.5876 1.22656 27.4663 1.22656 23.2236 1.22656H10.2236C5.98099 1.22656 3.85967 1.22656 2.54165 2.54458C1.22363 3.8626 1.22363 5.98392 1.22363 10.2266Z" fill="#9B84D5" stroke="#9B84D5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"/>
-                  <path d="M7.22401 1.25C7.22401 4.54936 4.54936 7.22401 1.25 7.22401" stroke="#522EAE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
-                  <path d="M25.2236 1.25C25.2236 4.52047 27.8772 7.17714 31.1371 7.2234" stroke="#522EAE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
-                  <path d="M22.2236 19.2266C22.2236 18.3981 22.8952 17.7266 23.7236 17.7266H31.2236L28.9736 14.7266M31.2236 22.2266C31.2236 23.055 30.5521 23.7266 29.7236 23.7266H22.2236L24.4736 26.7266" stroke="#522EAE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
-                  <path d="M20.7236 11.7266C20.7236 14.2118 18.7089 16.2266 16.2236 16.2266C13.7384 16.2266 11.7236 14.2118 11.7236 11.7266C11.7236 9.24128 13.7384 7.22656 16.2236 7.22656C18.7089 7.22656 20.7236 9.24128 20.7236 11.7266Z" fill="#EDE6FF" stroke="#522EAE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                  <path d="M1.22363 10.2266V13.2266C1.22363 17.4692 1.22363 19.5905 2.54165 20.9085C3.85967 22.2266 5.98099 22.2266 10.2236 22.2266H23.2236C27.4663 22.2266 29.5876 22.2266 30.9056 20.9085C32.2236 19.5905 32.2236 17.4692 32.2236 13.2266V10.2266C32.2236 5.98392 32.2236 3.8626 30.9056 2.54458C29.5876 1.22656 27.4663 1.22656 23.2236 1.22656H10.2236C5.98099 1.22656 3.85967 1.22656 2.54165 2.54458C1.22363 3.8626 1.22363 5.98392 1.22363 10.2266Z" fill="#4a2fa0" stroke="#4a2fa0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"/>
+                  <path d="M7.22401 1.25C7.22401 4.54936 4.54936 7.22401 1.25 7.22401" stroke="#1a007a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                  <path d="M25.2236 1.25C25.2236 4.52047 27.8772 7.17714 31.1371 7.2234" stroke="#1a007a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                  <path d="M22.2236 19.2266C22.2236 18.3981 22.8952 17.7266 23.7236 17.7266H31.2236L28.9736 14.7266M31.2236 22.2266C31.2236 23.055 30.5521 23.7266 29.7236 23.7266H22.2236L24.4736 26.7266" stroke="#1a007a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                  <path d="M20.7236 11.7266C20.7236 14.2118 18.7089 16.2266 16.2236 16.2266C13.7384 16.2266 11.7236 14.2118 11.7236 11.7266C11.7236 9.24128 13.7384 7.22656 16.2236 7.22656C18.7089 7.22656 20.7236 9.24128 20.7236 11.7266Z" fill="#c4b0ff" stroke="#1a007a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
                 </svg>
                 <p class="label">Transfer money</p>
               </button>
@@ -1333,8 +1351,8 @@
           </button>
           <button class="main-mic-btn" id="main-mic" data-mic-main>
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
         </div>
@@ -1359,7 +1377,7 @@
           <p class="dark-subtitle">You will choose an account then capture the front and back of your check.</p>
           <p class="voice-hint" style="margin-top:auto;">Say "Continue"</p>
         </div>
-        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="skip-next" data-go="privacy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </section>
@@ -1383,7 +1401,7 @@
           <p class="dark-subtitle">We keep your information private and secure. No data is stored after this session.</p>
           <p class="voice-hint" style="margin-top:auto;">Say "Continue"</p>
         </div>
-        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="skip-next" data-go="account-select"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </section>
@@ -1413,7 +1431,7 @@
             </button>
           </div>
         </div>
-        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="skip-next" data-go="amount"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </section>
@@ -1440,7 +1458,7 @@
           </div>
           <p class="voice-hint" id="amount-hint">Say the amount to confirm</p>
         </div>
-        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="skip-next" data-go="start-capture"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </section>
@@ -1477,8 +1495,8 @@
           <div class="ring-out"></div>
           <div class="ring-in">
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
@@ -1499,8 +1517,8 @@
         </div>
         <button class="cam-mic" data-mic>
           <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <button class="cam-skip" data-go="capture-front"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -1539,8 +1557,8 @@
         </button>
         <button class="cam-mic" data-mic>
           <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <!-- PROTOTYPE TEST CONTROLS -->
@@ -1564,8 +1582,8 @@
         </div>
         <button class="cam-mic" data-mic>
           <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <button class="cam-skip" data-go="capture-back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -1596,8 +1614,8 @@
         </button>
         <button class="cam-mic" data-mic>
           <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <!-- PROTOTYPE TEST CONTROLS -->
@@ -1647,8 +1665,8 @@
         </div>
         <button class="cam-mic" data-mic>
           <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+            <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <button class="cam-skip" data-go="rotate"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -1673,7 +1691,7 @@
           <p class="dark-title" style="width:100%;text-align:center;">Your check has been captured</p>
           <p class="dark-subtitle" style="width:100%;text-align:center;">Now I'm reviewing the details.</p>
         </div>
-        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
     </section>
 
@@ -1713,8 +1731,8 @@
           <div class="ring-out"></div>
           <div class="ring-in">
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
@@ -1745,8 +1763,8 @@
           <div class="ring-out"></div>
           <div class="ring-in">
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
@@ -1780,8 +1798,8 @@
           <div class="ring-out"></div>
           <div class="ring-in">
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
@@ -1805,7 +1823,7 @@
           <p class="dark-subtitle">You can customize the tone, detail level, and speaking speed.</p>
           <p class="voice-hint" style="margin-top:32px;">Say "Yes" to go to settings, or "No" to go home.</p>
         </div>
-        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="dark-mic" data-mic><svg width="58" height="58" viewBox="0 0 58 58" fill="none"><path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/><path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="skip-next" data-go="settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </section>
@@ -1870,8 +1888,8 @@
           </button>
           <button class="main-mic-btn" id="settings-mic" data-mic-main>
             <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="white"/>
-              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M40.4756 26.1903C40.4756 32.7651 35.1456 38.0951 28.5708 38.0951C21.996 38.0951 16.6661 32.7651 16.6661 26.1903V16.6665C16.6661 10.0917 21.996 4.76172 28.5708 4.76172C35.1456 4.76172 40.4756 10.0917 40.4756 16.6665V26.1903Z" fill="currentColor"/>
+              <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
         </div>
@@ -1897,6 +1915,7 @@ const state = {
   recognition: null,
   speakEnabled: true,
   isSpeaking: false,
+  editMode: false,
   voicePace: 1.0,
   voiceTone: 'friendly',
   voiceDetail: 'medium',
@@ -1905,6 +1924,10 @@ const state = {
 const ACCOUNT_LABELS = {
   checking: 'Checking (...7749)',
   savings: 'Savings (...3182)',
+};
+const ACCOUNT_LABELS_SPOKEN = {
+  checking: 'Checking, ending in 7, 7, 4, 9',
+  savings: 'Savings, ending in 3, 1, 8, 2',
 };
 
 // ═══════════ NAVIGATION ═══════════
@@ -1981,11 +2004,15 @@ function runScreen(id) {
       autoAdvance(2500, () => go('review'));
       break;
     case 'review':
+      state.editMode = false;
       updateReview();
       break;
     case 'cancel-timer':
       updateCancelTimer();
-      runCancelTimer();
+      // runCancelTimer() is called from speak()'s onend so the countdown
+      // starts only after the voice assistant finishes talking.
+      // Fallback: if FinSight mode is off, start immediately.
+      if (!state.finsightMode) runCancelTimer();
       break;
     case 'confirmation':
       updateConfirmation();
@@ -2014,7 +2041,7 @@ function syncFinsightModeUI() {
   if (sub) {
     sub.textContent = on
       ? 'Listening… say a banking task'
-      : 'Turn on Voice Assistant to start';
+      : 'Turn on FinSight mode to start';
   }
 }
 
@@ -2129,6 +2156,8 @@ function updateReview() {
 
 // ═══════════ CANCEL TIMER ═══════════
 let cancelInterval = null;
+let ttsStartTime = 0;         // timestamp when the current TTS utterance began
+const ECHO_GUARD_MS = 1200;   // ignore onspeechstart for this long after TTS starts
 function updateCancelTimer() {
   document.getElementById('timer-amt').textContent = '$' + getFormattedAmount();
   document.getElementById('timer-acct').textContent = 'to ' + ACCOUNT_LABELS[state.account];
@@ -2200,6 +2229,8 @@ function speak(text) {
     state.isSpeaking = true;
     u.onend = () => {
       state.isSpeaking = false;
+      // Start cancel timer only after TTS finishes
+      if (state.current === 'cancel-timer') runCancelTimer();
       // Resume listening if FinSight mode is on
       if (state.finsightMode) {
         setTimeout(() => startListening(), 300);
@@ -2207,11 +2238,19 @@ function speak(text) {
     };
     u.onerror = () => {
       state.isSpeaking = false;
+      if (state.current === 'cancel-timer') runCancelTimer();
       if (state.finsightMode) {
         setTimeout(() => startListening(), 300);
       }
     };
+    ttsStartTime = Date.now();
     window.speechSynthesis.speak(u);
+    // Start recognition alongside TTS so user can barge in after echo guard expires
+    if (state.finsightMode) {
+      setTimeout(() => {
+        if (state.isSpeaking && state.finsightMode) startListening();
+      }, ECHO_GUARD_MS + 100);
+    }
   } catch(e) {
     state.isSpeaking = false;
   }
@@ -2221,11 +2260,11 @@ function speakForScreen(id) {
   if (!state.finsightMode) return;
   let txt = SCREEN_AUDIO[id];
   if (id === 'amount') {
-    txt = `You're depositing to ${ACCOUNT_LABELS[state.account]}. How much are you depositing? Your daily limit is 7,500 dollars.`;
+    txt = `You're depositing to ${ACCOUNT_LABELS_SPOKEN[state.account]}. How much are you depositing? Your daily limit is 7,500 dollars.`;
   } else if (id === 'review') {
-    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS[state.account]}. Does the information sound good? Say Confirm if everything sounds correct.`;
+    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS_SPOKEN[state.account]}. Does the information sound good? Say Confirm if everything sounds correct.`;
   } else if (id === 'cancel-timer') {
-    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS[state.account]}. You have 10 seconds to cancel. Say Cancel to stop, or say Deposit now to continue.`;
+    txt = `You're depositing $${getFormattedAmount()} into your ${ACCOUNT_LABELS_SPOKEN[state.account]}. You have 10 seconds to cancel. Say Cancel to stop, or say Deposit now to continue.`;
   } else if (id === 'settings') {
     txt = "Now you're in Settings, where you can adjust your voice assistant. Choose a voice tone: Formal, Friendly, or Concise. Choose how much detail you want: Low, Medium, or High. Choose a speaking speed: 0.5x, 1.0x, or 1.5x.";
   }
@@ -2300,10 +2339,20 @@ function initRecognition() {
   r.interimResults = false;
   r.lang = 'en-US';
   let gotResult = false;
+  // Pause TTS the moment the user starts speaking, not after they finish.
+  // Echo guard: ignore the event if it fires within ECHO_GUARD_MS of TTS starting,
+  // which prevents the TTS audio from picking up through the mic and cancelling itself.
+  r.onspeechstart = () => {
+    if (state.isSpeaking && (Date.now() - ttsStartTime) < ECHO_GUARD_MS) return;
+    if (state.isSpeaking) {
+      window.speechSynthesis.cancel();
+      state.isSpeaking = false;
+    }
+  };
   r.onresult = (e) => {
     gotResult = true;
     const t = e.results[0][0].transcript.toLowerCase().trim();
-    // Barge-in: if TTS is speaking, cancel it immediately
+    // Barge-in fallback: cancel TTS if onspeechstart didn't fire
     if (state.isSpeaking) {
       window.speechSynthesis.cancel();
       state.isSpeaking = false;
@@ -2325,14 +2374,18 @@ function initRecognition() {
       playMicCloseCue();
     }
     gotResult = false;  // reset for next recognition cycle
-    // Auto-restart if FinSight mode is on and we're not currently speaking
     if (state.finsightMode && !state.isSpeaking) {
-      // Small delay to let any pending screen transition or speak() call settle
+      // Normal idle restart — small delay to let screen transitions settle
       setTimeout(() => {
-        if (state.finsightMode && !state.isSpeaking) {
-          startListening();
-        }
+        if (state.finsightMode && !state.isSpeaking) startListening();
       }, 250);
+    } else if (state.finsightMode && state.isSpeaking) {
+      // TTS still playing — keep mic alive so user can barge in after echo guard
+      const remaining = ECHO_GUARD_MS - (Date.now() - ttsStartTime);
+      const delay = Math.max(150, remaining + 100);
+      setTimeout(() => {
+        if (state.finsightMode && state.isSpeaking) startListening();
+      }, delay);
     }
   };
   r.onerror = (e) => {
@@ -2350,6 +2403,13 @@ function initRecognition() {
       setTimeout(() => {
         if (state.finsightMode && !state.isSpeaking) startListening();
       }, 500);
+    } else if (state.finsightMode && state.isSpeaking) {
+      // TTS still playing — keep mic alive for barge-in after echo guard
+      const remaining = ECHO_GUARD_MS - (Date.now() - ttsStartTime);
+      const delay = Math.max(200, remaining + 100);
+      setTimeout(() => {
+        if (state.finsightMode && state.isSpeaking) startListening();
+      }, delay);
     }
   };
   return r;
@@ -2396,6 +2456,9 @@ const M = {
   flash_off: ['flash off', 'turn off flash'],
   capture_now: ['capture', 'take photo', 'take picture'],
   deposit_now: ['deposit now', 'submit', 'go ahead'],
+  edit_done: ['done editing', "i'm done editing", 'done', "i'm done", 'go back', 'back', 'return'],
+  edit_account: ['edit account', 'change account'],
+  edit_amount: ['edit amount', 'change amount'],
   formal: ['formal'], friendly: ['friendly'], concise: ['concise'],
   low: ['low'], medium: ['medium'], high: ['high'],
   slow: ['slower', '0.5', 'half'],
@@ -2443,13 +2506,14 @@ function handleVoice(t) {
       if (matches(t, 'cancel_global')) return go('main');
       break;
     case 'account-select':
-      if (matches(t, 'checking')) { state.account = 'checking'; updateAccountSelection(); return go('amount'); }
-      if (matches(t, 'savings')) { state.account = 'savings'; updateAccountSelection(); return go('amount'); }
+      if (matches(t, 'checking')) { state.account = 'checking'; updateAccountSelection(); return go(state.editMode ? 'review' : 'amount'); }
+      if (matches(t, 'savings')) { state.account = 'savings'; updateAccountSelection(); return go(state.editMode ? 'review' : 'amount'); }
+      if (state.editMode && matches(t, 'edit_done')) return go('review');
       if (matches(t, 'cancel_global')) return go('main');
       break;
     case 'amount':
       if (state.pendingConfirm) {
-        if (matches(t, 'yes')) return go('start-capture');
+        if (matches(t, 'yes')) return go(state.editMode ? 'review' : 'start-capture');
         if (matches(t, 'no')) {
           state.amount = '';
           amountInput.value = '';
@@ -2466,6 +2530,7 @@ function handleVoice(t) {
         setTimeout(() => speak(`You entered $${getFormattedAmount()}. Is that correct? Say Yes to confirm.`), 400);
         return;
       }
+      if (state.editMode && matches(t, 'edit_done')) return go('review');
       if (matches(t, 'cancel_global')) return go('main');
       break;
     case 'start-capture':
@@ -2503,6 +2568,8 @@ function handleVoice(t) {
     case 'review':
       if (matches(t, 'yes')) return go('cancel-timer');
       if (matches(t, 'no')) return goFail();
+      if (matches(t, 'edit_account')) { state.editMode = true; return go('account-select'); }
+      if (matches(t, 'edit_amount')) { state.editMode = true; return go('amount'); }
       if (matches(t, 'cancel_global')) return go('main');
       break;
     case 'cancel-timer':
@@ -2514,7 +2581,7 @@ function handleVoice(t) {
       break;
     case 'confirmation':
       if (matches(t, 'details')) {
-        speak(`You've deposited $${getFormattedAmount()} into your ${ACCOUNT_LABELS[state.account]}. We received your check on April 8, 2026 at 1:43 PM Pacific. 100 dollars is available now, and the remaining will be available on April 9.`);
+        speak(`You've deposited $${getFormattedAmount()} into your ${ACCOUNT_LABELS_SPOKEN[state.account]}. We received your check on April 8, 2026 at 1:43 PM Pacific. 100 dollars is available now, and the remaining will be available on April 9.`);
         return;
       }
       if (matches(t, 'finish')) return go('settings-redirect');
@@ -2598,7 +2665,7 @@ const TONE_SAMPLES = {
 const DETAIL_SAMPLES = {
   low:    "Deposit complete.",
   medium: "Your deposit of 1,524 dollars is complete.",
-  high:   "Your deposit of 1,524 dollars and 24 cents has been received and will be available in your checking account ending in 7749 by tomorrow.",
+  high:   "Your deposit of 1,524 dollars and 24 cents has been received and will be available in your checking account ending in 7, 7, 4, 9 by tomorrow.",
 };
 function speakSettingPreview(group, val) {
   let confirm = '';
@@ -2642,6 +2709,18 @@ document.addEventListener('click', (e) => {
   const goBtn = e.target.closest('[data-go]');
   if (goBtn) {
     if (goBtn.dataset.acct) state.account = goBtn.dataset.acct;
+    // Edit buttons enter editMode so completion returns to review
+    if (goBtn.classList.contains('edit-btn')) {
+      state.editMode = true;
+      go(goBtn.dataset.go);
+      return;
+    }
+    // In editMode, redirect completion back to review instead of continuing the flow
+    if (state.editMode) {
+      const dest = goBtn.dataset.go;
+      if (state.current === 'account-select' && dest === 'amount') { go('review'); return; }
+      if (state.current === 'amount' && dest === 'start-capture') { go('review'); return; }
+    }
     go(goBtn.dataset.go);
     return;
   }
