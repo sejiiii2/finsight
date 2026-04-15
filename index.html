@@ -2427,10 +2427,14 @@ document.addEventListener('click', (e) => {
       state.finsightMode = true;
       syncFinsightModeUI();
       speakForScreen(state.current);
-    } else {
-      // Turn off — cancel TTS and stop listening
+    } else if (state.isSpeaking) {
+      // Skip / interrupt mid-speech — cancel TTS and start listening immediately
       try { window.speechSynthesis.cancel(); } catch(e) {}
       state.isSpeaking = false;
+      playMicHeardCue();
+      setTimeout(() => startListening(), 150);
+    } else {
+      // Already on and idle — turn off
       stopListening();
       state.finsightMode = false;
       syncFinsightModeUI();
@@ -2441,21 +2445,28 @@ document.addEventListener('click', (e) => {
 
   const mainMic = e.target.closest('[data-mic-main]');
   if (mainMic) {
-    state.finsightMode = !state.finsightMode;
-    syncFinsightModeUI();
-    if (state.finsightMode) {
-      // Speak context-aware instructions for whichever screen is active
+    if (!state.finsightMode) {
+      state.finsightMode = true;
+      syncFinsightModeUI();
       if (state.current === 'main') {
         speak('Say a banking task to begin.');
       } else {
         speakForScreen(state.current);
       }
-      // startListening will be called automatically when speak() finishes
+    } else if (state.isSpeaking) {
+      // Skip / interrupt mid-speech — cancel TTS and start listening immediately
+      try { window.speechSynthesis.cancel(); } catch(e) {}
+      state.isSpeaking = false;
+      playMicHeardCue();
+      setTimeout(() => startListening(), 150);
     } else {
+      // Already on and idle — turn off
       try { window.speechSynthesis.cancel(); } catch(e) {}
       state.isSpeaking = false;
       stopListening();
       playSessionEndCue();
+      state.finsightMode = false;
+      syncFinsightModeUI();
     }
     return;
   }
