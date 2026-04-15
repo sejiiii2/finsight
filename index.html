@@ -1880,9 +1880,8 @@ function speak(text) {
     u.rate = state.voicePace;
     u.pitch = 1.0;
     u.volume = 1.0;
-    // Pause recognition while speaking to avoid the mic picking up TTS output
+    // Allow barge-in: keep recognition running while speaking
     state.isSpeaking = true;
-    try { state.recognition && state.recognition.abort(); } catch(e) {}
     u.onend = () => {
       state.isSpeaking = false;
       // Resume listening if FinSight mode is on
@@ -1987,6 +1986,11 @@ function initRecognition() {
   r.onresult = (e) => {
     gotResult = true;
     const t = e.results[0][0].transcript.toLowerCase().trim();
+    // Barge-in: if TTS is speaking, cancel it immediately
+    if (state.isSpeaking) {
+      window.speechSynthesis.cancel();
+      state.isSpeaking = false;
+    }
     playMicHeardCue();
     showHeard(t);
     handleVoice(t);
@@ -2040,7 +2044,6 @@ function startListening() {
     showToast('Voice not supported in this browser. Use touch or skip arrows instead.');
     return;
   }
-  if (state.isSpeaking) return;  // don't start while TTS is active
   try {
     state.recognition.start();
     playMicOpenCue();
