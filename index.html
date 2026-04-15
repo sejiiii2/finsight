@@ -911,6 +911,64 @@
     .center-card-inner p { font-size: 20px; }
   }
 
+  /* ─── FAIL REASON ─── */
+  .fail-reason-detail {
+    font-size: 17px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 10px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  /* ─── PROTOTYPE CONTROLS (dev overlay) ─── */
+  .proto-bar {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 30;
+  }
+  .proto-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.92;
+  }
+  .proto-btn.ok  { background: #3a7d44; color: #fff; }
+  .proto-btn.err { background: #8b2a2a; color: #fff; }
+  .proto-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255,165,0,0.18);
+    border: 1px solid rgba(255,165,0,0.45);
+    color: rgba(255,165,0,0.9);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 29;
+  }
+  @media (orientation: landscape) {
+    .proto-bar {
+      bottom: auto;
+      top: 50%;
+      left: auto;
+      right: 8px;
+      transform: translateY(-50%);
+      flex-direction: column;
+    }
+  }
+
   /* Spinner */
   .spinner {
     width: 64px; height: 64px;
@@ -1417,6 +1475,11 @@
             <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
+        <!-- PROTOTYPE TEST CONTROLS -->
+        <div class="proto-bar">
+          <button class="proto-btn ok"  data-proto-ok="flip-check">✓ Success</button>
+          <button class="proto-btn err" data-proto-err>✗ Error</button>
+        </div>
       </div>
     </section>
 
@@ -1469,6 +1532,11 @@
             <path d="M47.6187 26.1904C47.6187 36.7102 39.0908 45.2381 28.5711 45.2381M28.5711 45.2381C18.0513 45.2381 9.52344 36.7102 9.52344 26.1904M28.5711 45.2381V52.3809" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
+        <!-- PROTOTYPE TEST CONTROLS -->
+        <div class="proto-bar">
+          <button class="proto-btn ok"  data-proto-ok="analyzing">✓ Success</button>
+          <button class="proto-btn err" data-proto-err>✗ Error</button>
+        </div>
       </div>
     </section>
 
@@ -1505,7 +1573,8 @@
                 <path d="M50 66.6667H50.0374M50 56.25L50 41.6667" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
               </svg>
             </div>
-            <p>I couldn't read that clearly</p>
+            <p id="fail-reason-title">I couldn't read that clearly</p>
+            <p class="fail-reason-detail" id="fail-reason-detail"></p>
           </div>
         </div>
         <button class="cam-mic" data-mic>
@@ -1933,6 +2002,41 @@ function stopCaptureSequence() {
   if (captureInterval) { clearInterval(captureInterval); captureInterval = null; }
 }
 
+// ═══════════ FAIL REASONS ═══════════
+const FAIL_REASONS = [
+  {
+    title: "Too dark to read",
+    detail: "Move to a brighter area or turn on a light and try again.",
+    tts: "I couldn't capture the check because it's too dark. Move to a brighter area or turn on a light, then say Retake when you're ready."
+  },
+  {
+    title: "Image is blurry",
+    detail: "Hold your phone very still and keep it flat above the check.",
+    tts: "The image came out blurry. Hold your phone steady and flat above the check, then say Retake."
+  },
+  {
+    title: "Check not fully in frame",
+    detail: "Make sure all four edges of the check are visible inside the guide.",
+    tts: "The check wasn't fully in frame. Make sure all four corners of the check are visible, then say Retake."
+  },
+  {
+    title: "Too much glare",
+    detail: "Try a different angle or avoid direct light sources behind you.",
+    tts: "There's too much glare on the check. Try tilting the phone slightly or move away from direct light, then say Retake."
+  }
+];
+
+function goFail(reasonIndex) {
+  const reason = FAIL_REASONS[reasonIndex !== undefined ? reasonIndex : Math.floor(Math.random() * FAIL_REASONS.length)];
+  state.failReason = reason;
+  const titleEl  = document.getElementById('fail-reason-title');
+  const detailEl = document.getElementById('fail-reason-detail');
+  if (titleEl)  titleEl.textContent  = reason.title;
+  if (detailEl) detailEl.textContent = reason.detail;
+  go('fail');
+  if (state.finsightMode) setTimeout(() => speak(reason.tts), 400);
+}
+
 // ═══════════ REVIEW ═══════════
 function updateReview() {
   document.getElementById('review-acct').textContent = ACCOUNT_LABELS[state.account];
@@ -1991,7 +2095,7 @@ const SCREEN_AUDIO = {
   'flip-check': "Next, flip your check and make sure to endorse it. Sign the back and write For electronic deposit only. Say Continue when you're ready.",
   'capture-back': null,
   'analyzing': "Perfect. I'm analyzing the check now. Please wait a moment.",
-  'fail': "I couldn't read that clearly. We can try again. Say Retake when you're ready.",
+  'fail': null, // dynamic — set by goFail()
   'success': "Your check has been captured. Now I'm reviewing the details.",
   'review': null, // dynamic
   'cancel-timer': null, // dynamic
@@ -2314,7 +2418,7 @@ function handleVoice(t) {
       break;
     case 'review':
       if (matches(t, 'yes')) return go('cancel-timer');
-      if (matches(t, 'no')) return go('fail');
+      if (matches(t, 'no')) return goFail();
       if (matches(t, 'cancel_global')) return go('main');
       break;
     case 'cancel-timer':
@@ -2475,6 +2579,20 @@ document.addEventListener('click', (e) => {
   if (flashBtn) {
     const fill = document.getElementById('flash-fill-front');
     fill.style.display = fill.style.display === 'none' ? 'block' : 'none';
+    return;
+  }
+
+  // Prototype test controls
+  const protoOk = e.target.closest('[data-proto-ok]');
+  if (protoOk) {
+    stopCaptureSequence();
+    go(protoOk.dataset.protoOk);
+    return;
+  }
+  const protoErr = e.target.closest('[data-proto-err]');
+  if (protoErr) {
+    stopCaptureSequence();
+    goFail();
     return;
   }
 
