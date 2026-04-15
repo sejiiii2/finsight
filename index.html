@@ -1917,6 +1917,7 @@ function speak(text) {
 }
 
 function speakForScreen(id) {
+  if (!state.finsightMode) return;
   let txt = SCREEN_AUDIO[id];
   if (id === 'amount') {
     txt = `You're depositing to ${ACCOUNT_LABELS[state.account]}. How much are you depositing? Your daily limit is 7,500 dollars.`;
