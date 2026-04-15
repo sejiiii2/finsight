@@ -348,7 +348,7 @@
   .try-saying {
     font-size: 22px;
     font-weight: 600;
-    color: var(--text-mute);
+    color: #fff;
     margin-bottom: 16px;
   }
   .task-grid {
@@ -383,9 +383,9 @@
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #fff;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.15);
     border-radius: 20px;
     padding: 3px 8px;
   }
@@ -395,19 +395,19 @@
     font-weight: 600;
     line-height: 1.2;
   }
-  .task-card.send { background: #0D1F35; }
-  .task-card.send .label { color: #67B8FF; }   /* 8.0:1 on #0D1F35 — AAA */
-  .task-card.balance { background: #0A1F0C; }
-  .task-card.balance .label { color: #6BDB82; } /* 10.1:1 on #0A1F0C — AAA */
-  .task-card.deposit { background: #201408; }
-  .task-card.deposit .label { color: #FFA357; } /* 9.5:1 on #201408 — AAA */
-  .task-card.transfer { background: #16102A; }
-  .task-card.transfer .label { color: #C4A0FF; } /* 9.2:1 on #16102A — AAA */
+  .task-card.send     { background: #7ab4ff; }
+  .task-card.send     .label { color: #001632; }
+  .task-card.balance  { background: #c3d799; }
+  .task-card.balance  .label { color: #101700; }
+  .task-card.deposit  { background: #faca86; }
+  .task-card.deposit  .label { color: #261500; }
+  .task-card.transfer { background: #bca7e8; }
+  .task-card.transfer .label { color: #0a0021; }
 
   /* Tab bar */
   .tab-bar {
-    background: #111111;
-    border-top: 1px solid #2A2F38;
+    background: #0c0c0c;
+    border-top: 1px solid #57575b;
     padding: 12px 21px 25px;
     display: flex;
     gap: 24px;
@@ -424,12 +424,12 @@
   .tab .lbl {
     font-size: 17px;
     font-weight: 600;
-    color: var(--text-mute);   /* #BFC6CF — 10.8:1 on #111 — AAA */
+    color: #9da4ad;
   }
-  .tab.active .lbl { color: var(--blue); font-weight: 700; } /* #4DA6FF — 7.9:1 on #111 — AAA */
+  .tab.active .lbl { color: #fff; font-weight: 700; }
   .tab.invisible { visibility: hidden; }
-  .tab svg { width: 32px; height: 32px; color: var(--text-mute); }
-  .tab.active svg { color: var(--blue); }
+  .tab svg { width: 32px; height: 32px; color: #9da4ad; }
+  .tab.active svg { color: #fff; }
 
   .main-mic-btn {
     position: absolute;
@@ -1273,7 +1273,7 @@
       <div class="main-screen">
         <div class="main-content">
           <div>
-            <p class="welcome-title">Welcome to FinSight</p>
+            <p class="welcome-title">What do you want to do today?</p>
             <p class="welcome-sub" id="welcome-sub">Turn on Voice Assistant to start</p>
           </div>
           <div>
@@ -1281,9 +1281,9 @@
             <div class="task-grid">
               <button class="task-card send" data-coming-soon>
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <circle cx="21" cy="13.5" r="11.5" fill="#96BEF0"/>
-                  <path d="M21 9C19.3431 9 18 10.0074 18 11.25C18 12.4926 19.3431 13.5 21 13.5C22.6569 13.5 24 14.5074 24 15.75C24 16.9926 22.6569 18 21 18M21 9C22.3062 9 23.4175 9.6261 23.8293 10.5M21 9V7.5M21 18C19.6938 18 18.5825 17.3739 18.1707 16.5M21 18V19.5" stroke="#005ABD" stroke-linecap="round" stroke-width="2.5"/>
-                  <path d="M4.5 21H8.09223C8.53345 21 8.96861 21.0994 9.36326 21.2904L12.4262 22.7723C12.8209 22.9633 13.256 23.0627 13.6972 23.0627H15.2612C16.7738 23.0627 18 24.2493 18 25.713C18 25.7722 17.9595 25.8242 17.9007 25.8404L14.0893 26.8942C13.4056 27.0832 12.6735 27.0174 12.0375 26.7096L8.76316 25.1254M18 24.75L24.8892 22.6334C26.1104 22.2529 27.4306 22.7041 28.1957 23.7634C28.7488 24.5294 28.5236 25.6263 27.7177 26.0913L16.4443 32.5958C15.7273 33.0095 14.8814 33.1104 14.0927 32.8764L4.5 30.0299" stroke="#005ABD" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                  <circle cx="21" cy="13.5" r="11.5" fill="#4a8fd4"/>
+                  <path d="M21 9C19.3431 9 18 10.0074 18 11.25C18 12.4926 19.3431 13.5 21 13.5C22.6569 13.5 24 14.5074 24 15.75C24 16.9926 22.6569 18 21 18M21 9C22.3062 9 23.4175 9.6261 23.8293 10.5M21 9V7.5M21 18C19.6938 18 18.5825 17.3739 18.1707 16.5M21 18V19.5" stroke="#001d45" stroke-linecap="round" stroke-width="2.5"/>
+                  <path d="M4.5 21H8.09223C8.53345 21 8.96861 21.0994 9.36326 21.2904L12.4262 22.7723C12.8209 22.9633 13.256 23.0627 13.6972 23.0627H15.2612C16.7738 23.0627 18 24.2493 18 25.713C18 25.7722 17.9595 25.8242 17.9007 25.8404L14.0893 26.8942C13.4056 27.0832 12.6735 27.0174 12.0375 26.7096L8.76316 25.1254M18 24.75L24.8892 22.6334C26.1104 22.2529 27.4306 22.7041 28.1957 23.7634C28.7488 24.5294 28.5236 25.6263 27.7177 26.0913L16.4443 32.5958C15.7273 33.0095 14.8814 33.1104 14.0927 32.8764L4.5 30.0299" stroke="#001d45" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
                 </svg>
                 <p class="label">Send money</p>
               </button>
