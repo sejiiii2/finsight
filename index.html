@@ -1177,6 +1177,44 @@
     background: #2A2F38;
   }
 
+  /* ─── PACE SLIDER ─── */
+  .pace-slider-wrap { display: flex; flex-direction: column; gap: 12px; }
+  .pace-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(to right, var(--blue) 50%, #1C2029 50%);
+  }
+  .pace-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 3px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(77,166,255,0.18);
+  }
+  .pace-slider::-moz-range-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 3px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(77,166,255,0.18);
+  }
+  .pace-labels {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-mute);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .pace-labels span.active-label { color: var(--blue); font-weight: 700; }
+
   /* Settings redirect */
   .redirect-screen .dark-content {
     align-items: center;
@@ -1805,10 +1843,14 @@
 
           <div class="settings-section">
             <p class="settings-label">Pacing</p>
-            <div class="pill-row" data-pill-group="pace">
-              <button class="pill" data-val="0.5">0.5x</button>
-              <button class="pill active" data-val="1">1.0x</button>
-              <button class="pill" data-val="1.5">1.5x</button>
+            <div class="pace-slider-wrap">
+              <input type="range" id="pace-slider" class="pace-slider"
+                     min="0.5" max="1.5" step="0.5" value="1">
+              <div class="pace-labels">
+                <span data-pace="0.5">0.5x</span>
+                <span data-pace="1" class="active-label">1.0x</span>
+                <span data-pace="1.5">1.5x</span>
+              </div>
             </div>
           </div>
         </div>
@@ -2489,9 +2531,9 @@ function handleVoice(t) {
       if (matches(t, 'low')) return setPill('detail', 'low');
       if (matches(t, 'medium')) return setPill('detail', 'medium');
       if (matches(t, 'high')) return setPill('detail', 'high');
-      if (matches(t, 'slow')) return setPill('pace', '0.5');
-      if (matches(t, 'normal')) return setPill('pace', '1');
-      if (matches(t, 'fast')) return setPill('pace', '1.5');
+      if (matches(t, 'slow')) return setPace('0.5');
+      if (matches(t, 'normal')) return setPace('1');
+      if (matches(t, 'fast')) return setPace('1.5');
       if (t.includes('back') || t.includes('home') || t.includes('task')) return go('main');
       break;
   }
@@ -2501,11 +2543,49 @@ function setPill(group, val) {
   const row = document.querySelector(`[data-pill-group="${group}"]`);
   if (!row) return;
   row.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.val === val));
-  if (group === 'pace') state.voicePace = parseFloat(val);
   if (group === 'tone') state.voiceTone = val;
   if (group === 'detail') state.voiceDetail = val;
   speakSettingPreview(group, val);
 }
+
+function setPace(val) {
+  const v = parseFloat(val);
+  state.voicePace = v;
+  const slider = document.getElementById('pace-slider');
+  if (slider) {
+    slider.value = v;
+    updateSliderFill(slider);
+  }
+  // Highlight matching label
+  document.querySelectorAll('.pace-labels [data-pace]').forEach(el => {
+    el.classList.toggle('active-label', parseFloat(el.dataset.pace) === v);
+  });
+  speakSettingPreview('pace', String(v));
+}
+
+function updateSliderFill(slider) {
+  const min = parseFloat(slider.min), max = parseFloat(slider.max);
+  const pct = (parseFloat(slider.value) - min) / (max - min) * 100;
+  slider.style.background = `linear-gradient(to right, var(--blue) ${pct}%, #1C2029 ${pct}%)`;
+}
+
+// Wire up pace slider
+(function initPaceSlider() {
+  const slider = document.getElementById('pace-slider');
+  if (!slider) return;
+  updateSliderFill(slider);
+  slider.addEventListener('input', () => {
+    updateSliderFill(slider);
+    // Update active label in real-time without speaking on every tick
+    const v = parseFloat(slider.value);
+    document.querySelectorAll('.pace-labels [data-pace]').forEach(el => {
+      el.classList.toggle('active-label', parseFloat(el.dataset.pace) === v);
+    });
+  });
+  slider.addEventListener('change', () => {
+    setPace(slider.value);
+  });
+})();
 
 // Brief confirmation + a sample sentence in the new tone/pace so the user
 // can hear the difference. Mirrors the spec: "After each selection, confirm
