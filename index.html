@@ -1623,6 +1623,7 @@ document.documentElement.style.setProperty('--cam-bg', `url("${CAM_BG_DATA_URL}"
 // ═══════════ STATE ═══════════
 const state = {
   current: 'main',
+  history: [],        // navigation back-stack
   finsightMode: false,
   account: 'checking',
   amount: '',
@@ -1641,11 +1642,18 @@ const ACCOUNT_LABELS = {
 };
 
 // ═══════════ NAVIGATION ═══════════
-function go(screenId) {
+function go(screenId, { addToHistory = true } = {}) {
   // Stop any running intervals
   stopCaptureSequence();
   stopCancelTimer();
   stopAutoAdvance();
+
+  // Push current screen to history (except when going home — reset stack)
+  if (screenId === 'main') {
+    state.history = [];
+  } else if (addToHistory && state.current) {
+    state.history.push(state.current);
+  }
 
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active', 'fade-in');
@@ -1655,10 +1663,17 @@ function go(screenId) {
   target.classList.add('active', 'fade-in');
   state.current = screenId;
 
-  // All screens are dark — status bar stays white
-
   // Run per-screen behavior
   runScreen(screenId);
+}
+
+function goBack() {
+  if (state.history.length === 0) {
+    speak("You're already at the home screen.");
+    return;
+  }
+  const prev = state.history.pop();
+  go(prev, { addToHistory: false });
 }
 
 function runScreen(id) {
@@ -2064,7 +2079,10 @@ const M = {
   continue: ['continue', 'next', 'go on', 'okay', 'ok', "i'm ready", 'im ready', 'ready', "let's go", 'lets go', 'start', 'begin'],
   yes: ['yes', 'yeah', 'yep', 'correct', "that's right", 'thats right', 'confirm', 'right', 'looks good'],
   no: ['no', 'nope', 'wrong', 'change', 'not right', 'incorrect'],
-  cancel_global: ['cancel', 'stop', 'never mind', 'nevermind', 'go back', 'exit', 'close', 'quit'],
+  cancel_global: ['cancel', 'stop', 'never mind', 'nevermind', 'exit', 'close', 'quit'],
+  nav_back: ['go back', 'back', 'previous', 'go to previous', 'return', 'step back', 'last page', 'last screen'],
+  nav_home: ['home', 'go home', 'main menu', 'main screen', 'start over', 'go to home'],
+  nav_settings: ['settings', 'go to settings', 'open settings', 'preferences'],
   deposit_check: ['deposit', 'deposit check', 'check deposit'],
   send_money: ['send money', 'send', 'transfer'],
   checking: ['checking', 'first', '7749'],
@@ -2100,6 +2118,11 @@ function parseAmount(t) {
 
 function handleVoice(t) {
   const screen = state.current;
+
+  // ── Global navigation (works from any screen) ──
+  if (matches(t, 'nav_back')) return goBack();
+  if (matches(t, 'nav_home') && screen !== 'main') return go('main');
+  if (matches(t, 'nav_settings') && screen !== 'settings') return go('settings');
 
   switch(screen) {
     case 'main':
