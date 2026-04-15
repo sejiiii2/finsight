@@ -1035,7 +1035,7 @@
         <div class="main-content">
           <div>
             <p class="welcome-title">Welcome to FinSight</p>
-            <p class="welcome-sub" id="welcome-sub">Turn on FinSight mode to start</p>
+            <p class="welcome-sub" id="welcome-sub">Turn on Voice Assistant to start</p>
           </div>
           <div>
             <p class="try-saying">Try saying</p>
@@ -1748,7 +1748,7 @@ function syncFinsightModeUI() {
   if (sub) {
     sub.textContent = on
       ? 'Listening… say a banking task'
-      : 'Turn on FinSight mode to start';
+      : 'Turn on Voice Assistant to start';
   }
 }
 
@@ -2309,7 +2309,7 @@ document.addEventListener('click', (e) => {
     if (state.finsightMode) {
       // Speak context-aware instructions for whichever screen is active
       if (state.current === 'main') {
-        speak('FinSight mode activated. Say a banking task to begin.');
+        speak('Say a banking task to begin.');
       } else {
         speakForScreen(state.current);
       }
